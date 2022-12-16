@@ -1,0 +1,96 @@
+ /********************
+ 	 GENERIC STYLE
+ *********************/
+ * {
+	-fx-qgu-table-row-height: 25px;
+}
+
+.editable-label:editable {
+	-fx-background-color: rgba(0, 191, 255, 0.2);
+}
+
+ /********************
+   GANTT CHART STYLE
+ *********************/
+.qgu-task-list,
+.qgu-timeline {
+	-fx-focus-color: transparent;
+} 
+
+.qgu-task-list .table-row-cell,
+.qgu-timeline .table-row-cell {
+	-fx-border-width: 0px;
+	-fx-cell-size: -fx-qgu-table-row-height;
+	-fx-focus-color: transparent;
+}
+
+.qgu-task-list .table-row-cell:selected,
+.qgu-timeline .table-row-cell:selected {
+	-fx-background-color: transparent;
+}
+
+.qgu-task-list .column-header-background .label,
+.qgu-timeline .column-header-background .label {
+	-fx-font-weight: normal;
+}
+
+
+ /********************
+   	TASK LIST STYLE
+ *********************/
+.qgu-task-list .table-row-cell:hover {
+	-fx-background-color: #dad5d0;
+}
+
+.qgu-task-list .table-row-cell:selected {
+	-fx-background-color: #beb9b5;
+	-fx-table-cell-border-color: white;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+
+
+
+ /********************
+	 TIMELINE STYLE
+ *********************/
+.qgu-timeline {
+	-fx-table-cell-border-color: transparent;
+	-fx-table-cell-border-width: 0px;
+}
+
+.qgu-timeline .table-column {
+	-fx-padding: 5 0 3 0;
+	-fx-border-width: 0px;
+}
+
+.qgu-timeline .table-row-cell:selected {
+	-fx-border-width: 0px;
+	-fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
+
+.qgu-col-weekend {
+	-fx-background-color: #fff2e8;
+}
+
+.gantt-piece-beginning {	
+	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
+	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 2, 3 0 4 3;
+	-fx-border-width: 0;
+	-fx-background-radius: 5 0 0 5;
+}
+
+.gantt-piece-center {
+	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
+	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 0, 3 0 4 0;
+	-fx-border-width: 0;
+}
+
+.gantt-piece-end {
+	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
+	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
+	-fx-border-width: 0;
+	-fx-background-radius: 0 5 5 0;
+}
