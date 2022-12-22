@@ -1,16 +1,26 @@
+
+
+
 import javafx.application.Application;
 import javafx.stage.Stage;
+import view.GanttChart;
 import javafx.scene.Scene;
-
-import view.TimelineView;
 
 public class App extends Application {  
 
+	/* (non-Javadoc)
+	 * @see javafx.application.Application#start(javafx.stage.Stage)
+	 */
+
 	public void start(Stage primaryStage) {
+		GanttChart ganttChart = new GanttChart();
+
 		try {
-			primaryStage.setTitle("Timeline");
-			primaryStage.setScene(new Scene(new TimelineView().init(13, true)));
-			//primaryStage.setScene(new Scene(new TimelineView().generate(LocalDate.now().minusDays(1), LocalDate.now().plusDays(3))));
+			Scene scene = new Scene(ganttChart.getViewGantt());
+			scene.getStylesheets().add(getClass().getResource("/css/gantt.css").toExternalForm());
+			ganttChart = new GanttChart();
+			primaryStage.setTitle("Ganttchart");
+			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

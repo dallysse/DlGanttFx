@@ -16,7 +16,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+import model.GanttTask;
 
 public class TimelineView extends VBox{
 
@@ -36,7 +40,6 @@ public class TimelineView extends VBox{
    // public VBox view;
     private YearMonth currentYearMonth;
 
-
     // labels
     private String nowLabel = "Now";
     private String earliestLabel = "Earliest";
@@ -44,8 +47,9 @@ public class TimelineView extends VBox{
 
     // list dates
     private ListView<LocalDate> list= new ListView<>();
+    private ScrollPane tableScroll =  new ScrollPane();
 
-    
+    private TableView<GanttTask> table = new TableView<>();
 
     /**
      * init time timeline
@@ -127,7 +131,7 @@ public class TimelineView extends VBox{
  
          menu.getChildren().addAll( now, earliest, lastest, ylist); 
         
-         this.getChildren().addAll(menu,list);
+         this.getChildren().addAll(menu,list,ylabel, tableScroll);
          return this;
     }
 
@@ -137,13 +141,21 @@ public class TimelineView extends VBox{
      * @param lastDay
      * @return
      */
+    Label ylabel= new Label(); 
+
+    
     public ListView<LocalDate> setListOfDay(LocalDate firstDay, LocalDate lastDay){
         ListView<LocalDate> list = new ListView<LocalDate>();
 
         for (LocalDate date = firstDay; !date.isAfter(lastDay); date = date.plusDays(1)) {
-
-            Label ylabel= new Label(); 
+            TableColumn<GanttTask, LocalDate> col = new TableColumn<>(date.format(dayFormatter));
+            this.table.getColumns().add(col);
+            tableScroll = new ScrollPane(this.table);
+            tableScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            tableScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+            //ylabel.setText(date.format(dayFormatter));
             //allDays.addAll(date);
+            //col.setText(date.format(dayFormatter));
             ylabel.setText(Integer.toString(date.getYear())); 
             list.getItems().add(date);
             list.setOrientation(Orientation.HORIZONTAL);
@@ -151,16 +163,18 @@ public class TimelineView extends VBox{
             list.setPrefWidth(800);
             list.setPrefHeight(70);
             list.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);  
-                       
+                   
         }
         return list;
     }
 
     /**
-     * color weekends
+     * color weekends  git config --global user.name "dallyssedjouhou"
+
      * @param list
      */
     public void colorWeekends(ListView<LocalDate> list){
+
         this.list.setCellFactory(new Callback<ListView<LocalDate>, ListCell<LocalDate>>() {
             @Override
             public ListCell<LocalDate> call(ListView<LocalDate> param) {

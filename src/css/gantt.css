@@ -1,96 +1,94 @@
- /********************
- 	 GENERIC STYLE
- *********************/
- * {
-	-fx-qgu-table-row-height: 25px;
+/* .table-view{
+    -fx-background-color: white;
+    -fx-font-size: 20px;
+    -fx-border-color: derive(black, -60%);
+}
+.table-view:focused{
+    -fx-background-color: derive(-fx-primary, 20%);
+}
+.table-row-cell {
+    -fx-cell-size: 40px;
+    -fx-border-style:solid inside;
+     -fx-border-width:2;
+} */
+/* .table-view .column-header-background{
+    -fx-background-color: white;
+}
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-text-weight:strong;
+    -fx-border-style:solid inside;
+    -fx-border-width:2;
+    -fx-border-radius:20;
+    -fx-padding:7;
+    -fx-font-size:18;
+ } */
+.table-view .column-header {
+    -fx-border-style:solid ;
+ }
+
+ .table-row-cell {
+    -fx-border-padding: 50px 100px 150px 200px;
+  
+    -fx-border-width: 1px;
+  }
+
+.priorityLow{ -fx-background-color: palegreen;}
+.priorityMedium{ -fx-background-color: skyblue;}
+.priorityHigh{ -fx-background-color: palevioletred;}
+
+/* .table-view .table-cell{
+    -fx-text-fill: black;
+    -fx-font-size:15;
+    -fx-alignment:center;
+    -fx-border-style:solid inside;
+    -fx-border-width:1;
 }
 
-.editable-label:editable {
-	-fx-background-color: rgba(0, 191, 255, 0.2);
+.table-row-cell:focused, .table-cell:focused{
+    -fx-text-fill: red;
+}
+.table-row-cell{
+    -fx-background-color: -fx-primary;
+    -fx-border-color: black;
+    -fx-table-cell-border-color: transparent;
+ }
+
+.table-row-cell:empty{
+    -fx-background-color:white;
+    -fx-border-color: transparent;
+    -fx-table-cell-border-color: transparent;
+ }
+
+.table-column{
+    -fx-alignment: CENTER;
+ }
+.table-row-cell:even{
+    -fx-background-color: derive(white, -10%);
+ }
+.table-row-cell:odd{
+     -fx-background-color: white;
+ }
+ .table-row-cell:even:hover{
+     -fx-background-color:pink;
+ }
+ .table-row-cell:odd:hover{
+    -fx-background-color: skyblue;
+ }
+
+.table-row-cell:even:empty{
+    -fx-background-color: white;
+}
+.table-row-cell:odd:empty{
+    -fx-background-color: white;
 }
 
- /********************
-   GANTT CHART STYLE
- *********************/
-.qgu-task-list,
-.qgu-timeline {
-	-fx-focus-color: transparent;
-} 
-
-.qgu-task-list .table-row-cell,
-.qgu-timeline .table-row-cell {
-	-fx-border-width: 0px;
-	-fx-cell-size: -fx-qgu-table-row-height;
-	-fx-focus-color: transparent;
-}
-
-.qgu-task-list .table-row-cell:selected,
-.qgu-timeline .table-row-cell:selected {
-	-fx-background-color: transparent;
-}
-
-.qgu-task-list .column-header-background .label,
-.qgu-timeline .column-header-background .label {
-	-fx-font-weight: normal;
-}
-
-
- /********************
-   	TASK LIST STYLE
- *********************/
-.qgu-task-list .table-row-cell:hover {
-	-fx-background-color: #dad5d0;
-}
-
-.qgu-task-list .table-row-cell:selected {
-	-fx-background-color: #beb9b5;
-	-fx-table-cell-border-color: white;
+.table-row-cell:selected {
+    -fx-background-color: black;
+    -fx-text-fill: white;
     -fx-background-insets: 0;
-    -fx-background-radius: 1;
-}
-
-
-
- /********************
-	 TIMELINE STYLE
- *********************/
-.qgu-timeline {
-	-fx-table-cell-border-color: transparent;
-	-fx-table-cell-border-width: 0px;
-}
-
-.qgu-timeline .table-column {
-	-fx-padding: 5 0 3 0;
-	-fx-border-width: 0px;
-}
-
-.qgu-timeline .table-row-cell:selected {
-	-fx-border-width: 0px;
-	-fx-table-cell-border-color: transparent;
-    -fx-background-insets: 0;
-    -fx-background-radius: 1;
-}
-
-.qgu-col-weekend {
-	-fx-background-color: #fff2e8;
-}
-
-.gantt-piece-beginning {	
-	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
-	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 2, 3 0 4 3;
-	-fx-border-width: 0;
-	-fx-background-radius: 5 0 0 5;
-}
-
-.gantt-piece-center {
-	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
-	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 0, 3 0 4 0;
-	-fx-border-width: 0;
-}
-
-.gantt-piece-end {
-	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
-	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
-	-fx-border-width: 0;
-	-fx-background-radius: 0 5 5 0;
-}
+ }
+.table-row-cell:selected .table-cell{
+    -fx-text-fill: white;
+ } */
