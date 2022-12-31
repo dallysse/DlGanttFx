@@ -5,72 +5,36 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
-import java.util.stream.Collector;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
-import javafx.application.Application;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.util.Callback;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import model.GanttTask;
-
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
+import view.GanttBarPiece.PieceType;
 
 
-public class TimelineWithGraphicView extends VBox {
+public class TimelineWithGraphicView extends TableView<GanttTask> {
 
    // formats
-   private DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\n dd "); 
-   private DateTimeFormatter weekFormatter = DateTimeFormatter.ofPattern("EEEE dd. MMM yyyy "); 
+    private DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\n dd "); 
+    private DateTimeFormatter weekFormatter = DateTimeFormatter.ofPattern("EEEE dd. MMM yyyy "); 
 
-   private final static String styleFormat= "-fx-background-color: %s";
 
-   private String weekendColor="lightblue";
+    private final static String styleFormat= "-fx-background-color: %s";
 
-   // public VBox view;
+    private String weekendColor="lightblue";
+    
     private YearMonth currentYearMonth;
 
-    // labels
-    private String nowLabel = "Now";
-    private String earliestLabel = "Earliest";
-    private String lastestLabel = "Lastest";
-    private TableView<GanttTask> tableView = new TableView<>();
-    private ScrollPane tableScroll =  new ScrollPane();
+    private LocalDate startDay;
+    private LocalDate endDay;
 
     /**
-     * set list of day in a list view
-     * @param firstDay
-     * @param lastDay
-     * @return
-     */
-
-        /**
      * init time timeline
      * 
      * the number can be the number of days or the number of months
@@ -81,68 +45,21 @@ public class TimelineWithGraphicView extends VBox {
     public TimelineWithGraphicView init(int number, boolean isNumberOfMonth) {
         currentYearMonth = YearMonth.now();
         LocalDate today = LocalDate.now() ;
-        LocalDate startDay = (isNumberOfMonth) ? currentYearMonth.atDay(1) : today;
-        LocalDate endDay = (isNumberOfMonth) ? currentYearMonth.plusMonths(number).atEndOfMonth():
+        this.startDay = (isNumberOfMonth) ? currentYearMonth.atDay(1) : today;
+        this.endDay = (isNumberOfMonth) ? currentYearMonth.plusMonths(number).atEndOfMonth():
         today.plusDays(number);
-        
+        this.getStyleClass().add("timeline");
+        this.setItems(FXCollections.observableArrayList());
+
        return generate(startDay, endDay);
     }
 
     public TimelineWithGraphicView generate(LocalDate firstDay, LocalDate lastDay){
-        // get list of days
-       
-        this.tableView = setListOfDay(firstDay, lastDay);
+        // get list of days      
+        setListOfDay(firstDay, lastDay);
 
-        tableScroll = new ScrollPane(tableView);
-        tableScroll.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-        tableScroll.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-        // get list of years
-        ListView<Integer> yearlist = getListOfYears(firstDay, lastDay);
-
-        // scroll to first day of years
-        scrollToFirstDayOfYearsEvent(yearlist);
- 
-        Button now = new Button(nowLabel);
-
-        // go to now
-        scrollToGivenDate(now, LocalDate.now());
-
-        Button earliest = new Button(earliestLabel);
-
-        // go to earliest
-        scrollToGivenDate(earliest, firstDay);
-
-        Button lastest = new Button(lastestLabel);
-
-        // go to earliest
-        scrollToGivenDate(lastest, lastDay);
-
-        Image imgNow = new Image("ressources/clock.png");
-        ImageView iconN = new ImageView(imgNow);
-        now.setGraphic(iconN); 
-
-        Image ImgEarliest = new Image("ressources/back.png");
-        ImageView iconE = new ImageView(ImgEarliest);
-        earliest.setGraphic(iconE);
-
-        Image Imglast = new Image("ressources/next.png");
-        ImageView iconL = new ImageView(Imglast);
-        lastest.setGraphic(iconL); 
-
-        HBox menu = new HBox(10);
-
-        HBox.setHgrow(now, Priority.ALWAYS);
-        HBox.setHgrow(earliest, Priority.ALWAYS);
-        HBox.setHgrow(lastest, Priority.ALWAYS);
-        HBox.setHgrow(yearlist, Priority.ALWAYS);
-        menu.setAlignment(Pos.CENTER);
-
-        menu.getChildren().addAll( now, earliest, lastest, yearlist); 
-       
-        this.getChildren().addAll(menu, tableScroll);
-
-        //menu.getChildren().addAll( now, earliest, lastest, ylist); 
+       //this.getChildren().addAll(menu, tableView);
+        setGanttPiece(new GanttTask("a", LocalDate.of(2022, 12, 21), LocalDate.of(2022, 12, 31), 1, true, "akjjaa"));
        
         return this;
    }
@@ -156,119 +73,178 @@ public class TimelineWithGraphicView extends VBox {
 
 
     public TableView<GanttTask> setListOfDay(LocalDate firstDay, LocalDate lastDay){
-        TableView<GanttTask> table = new TableView<GanttTask>();
+        //TableView<GanttTask> table = new TableView<GanttTask>();
 
         WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
         int weekNumber = firstDay.get(weekFields.weekOfWeekBasedYear());
 
-        // get first year
-       // int year=firstDay.getYear();
-       // TableColumn<GanttTask, ?> yearColumn=new TableColumn<>(Integer.toString(year));
-        TableColumn<GanttTask, ?> yearColumn=new TableColumn<>("W" + weekNumber + ", " + firstDay.format(weekFormatter));
-
+        // get first week
+        TableColumn<GanttTask, GanttBarPiece> weekColumn=new TableColumn<GanttTask, GanttBarPiece>("W" + weekNumber + ", " + firstDay.format(weekFormatter));
+        
+        // add first week column
+        getColumns().add(weekColumn);
         for (LocalDate date = firstDay; !date.isAfter(lastDay); date = date.plusDays(1)) {
-            // get current year
+            // get current week
           //  int currentYear=date.getYear();
-          int currentWeeknumber=date.get(weekFields.weekOfWeekBasedYear());
+            int currentWeeknumber=date.get(weekFields.weekOfWeekBasedYear());
 
             if(currentWeeknumber != weekNumber){
-                // add year column and subcolumns to the table
-                table.getColumns().add(yearColumn);
 
-                // take the current year
+                // take the current week
                 weekNumber = currentWeeknumber;
 
-                // create a new year column 
-                yearColumn=new TableColumn<>("W" + weekNumber+ ", " + date.format(weekFormatter));
+                // create a new week column 
+                weekColumn=new TableColumn<GanttTask, GanttBarPiece>("W" + weekNumber+ ", " + date.format(weekFormatter));
+
+                // add week column and subcolumns to the table
+                getColumns().add(weekColumn);
             }
 
-            TableColumn<GanttTask, ?> yearSubcolumn=new TableColumn<>(date.format(dayFormatter));
+            TableColumn<GanttTask, GanttBarPiece> weekSubcolumn=new TableColumn<GanttTask, GanttBarPiece>(date.format(dayFormatter));
 
             if(isWeekend(date)){
-                yearSubcolumn.setStyle(String.format(styleFormat, weekendColor));
+                weekSubcolumn.setStyle(String.format(styleFormat, weekendColor));
             }
 
-            // create year subcolumns
-            yearColumn.getColumns().add(yearSubcolumn); 
+            // create week subcolumns
+            weekColumn.getColumns().add(weekSubcolumn); 
+            //yearSubcolumn.getColumns().add(c);
             //yearColumn.getStyleClass().add("table-view .column-header-background;");
-            table.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);                     
+            getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);                     
         }
 
-        return table;
+        return this;
     }
 
-    public ListView<Integer> getListOfYears(LocalDate firstDay, LocalDate lastDay){
-        int firstOfYear = firstDay.getYear();
-        int lastOfYear = lastDay.getYear();
+   
 
-        ListView<Integer> ylist = new ListView<Integer>();
-        ylist.setOrientation(Orientation.HORIZONTAL);
-        // Set the Size of the ListView
-        ylist.setPrefSize(30, 30);
+    public void setGanttPiece(GanttTask ganttTask){
+        // add itemss
+        this.getItems().add(new GanttTask());
 
-        for (int y = firstOfYear; y<=lastOfYear; y++) {
-                ylist.getItems().add(y);
-        }
-        return ylist;
-    }
-        // events
+        // check if start and end are defined
+        if(ganttTask.getStartDate() != null && ganttTask.getEndDate() != null){
+            TableColumn<GanttTask, GanttBarPiece> firstColumn = findDayColumn (ganttTask.getStartDate());
+            TableColumn<GanttTask, GanttBarPiece> lastColumn = findDayColumn (ganttTask.getEndDate());
 
-    public void scrollToFirstDayOfYearsEvent(ListView<Integer> yearlist){
-        yearlist.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent event) {
-                 int selectedYear = yearlist.getSelectionModel().getSelectedItem();
-
+            if(firstColumn != null && lastColumn != null){
+                // draw diagram
+                drawDiagram(firstColumn, lastColumn, ganttTask.getName());
                 
-    
-               /*  List<LocalDate> daysOfSelectedYearList = tableView.getItems().stream()
-                .filter(e->e.getYear() == selectedYear).collect(Collectors.toList());
-    
-                if(!daysOfSelectedYearList.isEmpty()){
-                    scrollAndSelect(daysOfSelectedYearList.get(0));
-                } */
-                
-                List<TableColumn<GanttTask, ?>> columnOfSelectedYearList= tableView.getColumns().stream()
-                .filter(e-> e.getText() != null &&  e.getText().contains(String.valueOf(selectedYear)))
-                .collect(Collectors.toList());
 
-                if(!columnOfSelectedYearList.isEmpty()){
-                    System.out.println(columnOfSelectedYearList.get(0).getText());
-                    
-                    tableView.scrollToColumn(columnOfSelectedYearList.get(0));
-                }
-              
-
+            } else {
+                System.err.println(String.format("gantt piece could not be defined. reason: At least one column could not be found for start: %s end: %s", ganttTask.getStartDate(), ganttTask.getEndDate()));
             }
-        }); 
+        } 
+        
+    }
+  
+    public TableColumn<GanttTask, GanttBarPiece> findDayColumn(LocalDate localDate){
+        return findDayColumn(localDate, true);
     }
 
-    /**
-     * scroll to given date
-     * @param button
-     * @param date
-     */
-    public void scrollToGivenDate(Button button, LocalDate date){
-        button.setOnAction(new EventHandler<ActionEvent>() 
-                {
-                    @Override public void handle(ActionEvent e) 
-                    {
-                        //scrollAndSelect(date);
+    public TableColumn<GanttTask, GanttBarPiece> findDayColumn(LocalDate localDate, boolean chooseFirstDayOfWeek){
+        WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
+        int weekNumber = localDate.get(weekFields.weekOfWeekBasedYear());
+        int dayOfWeek = localDate.getDayOfWeek().getValue();
+
+        // find week column
+        String weekColumnName = (chooseFirstDayOfWeek) ? "W" + weekNumber + ", " + localDate.minusDays(dayOfWeek - 1).format(weekFormatter) :
+        "W" + weekNumber + ", " + localDate.format(weekFormatter);
+        Optional<TableColumn<GanttTask, ?>> weekColumnOpt = findDayColumn(this.getColumns(), weekColumnName);
+
+        // check if the week column exists
+        if(weekColumnOpt.isPresent()) {
+            String weekSubcolumnName = localDate.format(dayFormatter);
+
+            // find day column
+            Optional<TableColumn<GanttTask, ?>> weekSubcolumn = findDayColumn(weekColumnOpt.get().getColumns(), weekSubcolumnName);
+
+            if(weekSubcolumn.isPresent()){
+                return (TableColumn<GanttTask, GanttBarPiece>) weekSubcolumn.get();
+            } else {
+            System.err.println(String.format("Day column '%s' could not be found", weekColumnName));
+            }
+
+        } else {
+            System.err.println(String.format("Week column '%s' could not be found", weekColumnName));
+        }
+        return null;
+    }
+
+    private Optional<TableColumn<GanttTask, ?>> findDayColumn(ObservableList<TableColumn<GanttTask,?>> columns, String columnName){
+        return columns.stream()
+        .filter(e -> e.getText() != null && e.getText().equalsIgnoreCase(columnName)).findFirst();
+    }
+
+    public void drawDiagram(TableColumn<GanttTask, GanttBarPiece> startColumn, TableColumn<GanttTask, GanttBarPiece> endColumn, String name){
+        boolean isNextCenter = false;
+        for(TableColumn<GanttTask, ?> column : getColumns().stream()
+            .flatMap(e->e.getColumns().stream()).collect(Collectors.toList())){
+                    if(column.equals(startColumn)){
+                        isNextCenter = true;
+                        ((TableColumn<GanttTask, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.BEGINNING, name));
+                    } else if(column.equals(endColumn)){
+                        isNextCenter = false;
+                        ((TableColumn<GanttTask, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.END));
+                        break;
+                    } else if (isNextCenter) {
+                        ((TableColumn<GanttTask, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.CENTER));
                     }
-                }); 
+                }
     }
 
-    /**
-     * * scroll and select to given date
-     * @param date
-     */
-    private void scrollAndSelect(int date){
-        TableColumn column = tableView.getColumns().get(date);
-
-        tableView.scrollTo(date);
-        //tableView.getSelectionModel().clearSelection();
-        //tableView.getSelectionModel().select(date);
+    public DateTimeFormatter getDayFormatter() {
+        return dayFormatter;
     }
+
+    public void setDayFormatter(DateTimeFormatter dayFormatter) {
+        this.dayFormatter = dayFormatter;
+    }
+
+    public DateTimeFormatter getWeekFormatter() {
+        return weekFormatter;
+    }
+
+    public void setWeekFormatter(DateTimeFormatter weekFormatter) {
+        this.weekFormatter = weekFormatter;
+    }
+
+    public static String getStyleformat() {
+        return styleFormat;
+    }
+
+    public String getWeekendColor() {
+        return weekendColor;
+    }
+
+    public void setWeekendColor(String weekendColor) {
+        this.weekendColor = weekendColor;
+    }
+
+    public YearMonth getCurrentYearMonth() {
+        return currentYearMonth;
+    }
+
+    public void setCurrentYearMonth(YearMonth currentYearMonth) {
+        this.currentYearMonth = currentYearMonth;
+    }
+
+    public LocalDate getStartDay() {
+        return startDay;
+    }
+
+    public void setStartDay(LocalDate startDay) {
+        this.startDay = startDay;
+    }
+
+    public LocalDate getEndDay() {
+        return endDay;
+    }
+
+    public void setEndDay(LocalDate endDay) {
+        this.endDay = endDay;
+    }
+
     
 }

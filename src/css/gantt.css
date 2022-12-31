@@ -28,15 +28,43 @@
     -fx-border-style:solid ;
  }
 
- .table-row-cell {
-    -fx-border-padding: 50px 100px 150px 200px;
-  
-    -fx-border-width: 1px;
-  }
+ .gantt-piece-beginning {	
+	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
+	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 2, 3 0 4 3;
+	-fx-border-width: 0;
+	-fx-background-radius: 5 0 0 5;
+}
 
-.priorityLow{ -fx-background-color: palegreen;}
-.priorityMedium{ -fx-background-color: skyblue;}
-.priorityHigh{ -fx-background-color: palevioletred;}
+.gantt-piece-center {
+	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
+	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 0, 3 0 4 0;
+	-fx-border-width: 0;
+}
+
+.gantt-piece-end {
+	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
+	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
+	-fx-border-width: 0;
+	-fx-background-radius: 0 5 5 0;
+}
+.timeline {
+	-fx-table-cell-border-color: transparent;
+	-fx-table-cell-border-width: 0px;
+    -fx-background-color: #dad5d0;
+
+}
+
+.timeline .table-column {
+	-fx-padding: 5 0 3 0;
+	-fx-border-width: 0px;
+}
+
+.timeline .table-row-cell:selected {
+	-fx-border-width: 0px;
+	-fx-table-cell-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 1;
+}
 
 /* .table-view .table-cell{
     -fx-text-fill: black;

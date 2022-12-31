@@ -1,21 +1,18 @@
 package model;
 
-import java.time.LocalDateTime;
-
-
+import java.io.Serializable;
+import java.time.Duration;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 
-public class GanttTask implements Cloneable{
+
+public class GanttTask implements Cloneable, Serializable{
+	private static final long serialVersionUID = 4669501028180213212L;
+
 	
 	private String id;
-	private int level;
+	private int priority;
 	private String name;
 	private LocalDate startDate;
 	private LocalDate endDate;
@@ -23,49 +20,33 @@ public class GanttTask implements Cloneable{
 	private String info;
 	private boolean isCritical;
 
-
+	public GanttTask() {}
 	
 	public GanttTask(GanttTask that) {
 		this.id = UUID.randomUUID().toString();
-		this.level = 0;
+		this.priority = 3;
 		this.name = that.name;
 		this.startDate = LocalDate.from(that.startDate);
 		this.endDate = LocalDate.from(that.endDate);
 	}
 	
-
-	
-	public GanttTask(String name, LocalDate startDate, LocalDate endDate, int level, boolean isCritical,  double workComplete, String info) {
-		this.level = level;
+	public GanttTask(String name, LocalDate startDate, LocalDate endDate) {
 		this.name = name;
 		this.startDate = startDate;
 		this.endDate = endDate;
-		this.isCritical= isCritical;
-		this.workComplete=workComplete;
-		this.info=info;
 	}
-
 	
-	@Override 
-	public boolean equals(Object o) {
-		if(!(o instanceof GanttTask))
-			return false;
-		
-		GanttTask that = (GanttTask) o;
-		
-		if(!this.name.trim().equals(that.name.trim()))
-			return false;
-		
-		if(!this.startDate.isEqual(that.startDate))
-			return false;
-		
-		if(!this.endDate.isEqual(that.endDate))
-			return false;
-		
-//		if(!(this.level == that.level))
-//			return false;
-		
-		return true;
+	
+	public GanttTask(String name, LocalDate startDate, LocalDate endDate, int level, boolean isCritical, String info) {
+		this.priority = level;
+		this.name = name;
+		this.startDate = startDate;
+		this.endDate = endDate;
+		this.isCritical = isCritical;
+		this.workComplete = ( startDate == null || endDate == null ) ? 0.0 :
+		(LocalDate.now().isBefore(startDate) ? 0.0 :
+		(double) Duration.between( startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() / (double) Duration.between( startDate.atStartOfDay(), endDate.atStartOfDay()).toDays()) ;
+		this.info=info;
 	}
 	
 
@@ -119,11 +100,11 @@ public class GanttTask implements Cloneable{
 	}
 	
 	public int getLevel() {
-		return level;
+		return priority;
 	}
 
 	public void setLevel(int level) {
-		this.level = level;
+		this.priority = level;
 	}
 	
 	public String getName() {

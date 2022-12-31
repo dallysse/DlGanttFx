@@ -1,5 +1,7 @@
 package view;
 
+import javax.swing.text.TabableView;
+
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,18 +22,20 @@ public class GanttChart  {
     private VBox leftControl  = new VBox(new Label("Left Control"));
     //private VBox centerControl  = new VBox(new Label("Center Control"));
     private GanttTableView ganttTableView= new GanttTableView();
-    ;
+    private TimelineWithGraphicView timelineWithGraphicView; 
 
 
 
     public GanttChart(){
         //VBox sp1 = new VBox();
         //sp1=new VBox(new Button("Button One"));
-        root.addRow(0, new TimelineWithGraphicView().init(13, true));  
+        timelineWithGraphicView = new TimelineWithGraphicView().init(13, true);
+        root.addRow(1, timelineWithGraphicView);  
+        root.addRow(0, new GanttMenu().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView));  
+
         //view.setTop();
-        //view.setCenter(centerControl);
         //view = new BorderPane(new TimelineView().init(13, true));
-        viewGantt = new SplitPane(ganttTableView, root);
+        viewGantt = new SplitPane(ganttTableView.getCompleteView(), root);
     }
 
 
