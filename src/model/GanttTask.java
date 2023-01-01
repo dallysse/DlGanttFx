@@ -3,55 +3,183 @@ package model;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.UUID;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
-
-public class GanttTask implements Cloneable, Serializable{
-	private static final long serialVersionUID = 4669501028180213212L;
+public class GanttTask {
 
 	
-	private String id;
+/* 	private String id;
 	private int priority;
 	private String name;
 	private LocalDate startDate;
 	private LocalDate endDate;
 	private Double workComplete;
 	private String info;
-	private boolean isCritical;
+	private boolean 
+	; */
+	public enum TaskState {
+		RUNNING,
+		HALTED,
+		TERMINATED
+	}
+
+	private IntegerProperty id;
+	private StringProperty name;
+	private ObjectProperty<LocalDate> startDate;
+	private ObjectProperty<LocalDate> endDate;
+	private SimpleIntegerProperty priority;
+	private StringProperty info;
+	private DoubleProperty workComplete;
+	private BooleanProperty isCritical;
+	private IntegerProperty taskDuration;
+	private TaskState state;
+	private ObservableList<GanttTask> ganttTasks = FXCollections
+	.observableArrayList();
 
 	public GanttTask() {}
 	
-	public GanttTask(GanttTask that) {
-		this.id = UUID.randomUUID().toString();
-		this.priority = 3;
-		this.name = that.name;
-		this.startDate = LocalDate.from(that.startDate);
-		this.endDate = LocalDate.from(that.endDate);
-	}
-	
 	public GanttTask(String name, LocalDate startDate, LocalDate endDate) {
-		this.name = name;
-		this.startDate = startDate;
-		this.endDate = endDate;
+		this.name = new SimpleStringProperty(name);
+		this.startDate = new SimpleObjectProperty<>(startDate);
+		this.endDate = new SimpleObjectProperty<>(endDate);
 	}
-	
-	
-	public GanttTask(String name, LocalDate startDate, LocalDate endDate, int level, boolean isCritical, String info) {
-		this.priority = level;
-		this.name = name;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.isCritical = isCritical;
-		this.workComplete = ( startDate == null || endDate == null ) ? 0.0 :
+		
+	public GanttTask(String name, LocalDate startDate, LocalDate endDate, Integer priority, boolean isCritical, String info) {
+		this.name = new SimpleStringProperty(name);
+		this.startDate = new SimpleObjectProperty<>(startDate);
+		this.endDate = new SimpleObjectProperty<>(endDate);
+		double totalWorkingDays = Duration.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toDays() + 1;
+		this.taskDuration = new SimpleIntegerProperty((int) totalWorkingDays);
+		this.priority = new SimpleIntegerProperty(priority);
+		this.isCritical = new SimpleBooleanProperty(isCritical);
+		this.workComplete = new SimpleDoubleProperty(( startDate == null || endDate == null ) ? 0.0 :
 		(LocalDate.now().isBefore(startDate) ? 0.0 :
-		(double) Duration.between( startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() / (double) Duration.between( startDate.atStartOfDay(), endDate.atStartOfDay()).toDays()) ;
-		this.info=info;
+		(double) (Duration.between( startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1) / totalWorkingDays) );
+		this.state= (workComplete == null || workComplete.get() == 0.0) ? TaskState.HALTED : ((workComplete.get() == 1.0) ? TaskState.TERMINATED : TaskState.RUNNING) ;
+		this.info=new SimpleStringProperty(info);
 	}
 	
+	public StringProperty nameProperty() {
+		return this.name;
+	}
+
+	public String getName() {
+		return this.nameProperty().get();
+	}
+
+	public void setName(final String name) {
+		this.nameProperty().set(name);
+	}
+
+	public ObjectProperty<LocalDate> startDateProperty() {
+		return this.startDate;
+	}
+
+	public LocalDate getStartDate() {
+		return this.startDateProperty().get();
+	}
+
+	public void setStartDate( LocalDate startDate) {
+		this.startDateProperty().set(startDate);
+	}
 
 
-	public String getId() {
+	public ObjectProperty<LocalDate> endDateProperty() {
+		return this.endDate;
+	}
+
+	public LocalDate getEndDate() {
+		return this.endDateProperty().get();
+	}
+
+	public void setEndDate(final LocalDate endDate) {
+		this.endDateProperty().set(endDate);
+	}
+
+	public IntegerProperty priorityProperty() {
+		return this.priority;
+	}
+
+	public Integer getPriority() {
+		return this.priorityProperty().get();
+	}
+
+	public void setPriority(Integer priority) {
+		this.priorityProperty().set(priority);
+	}
+
+	public StringProperty infoProperty() {
+		return this.info;
+	}
+
+	public String info() {
+		return this.nameProperty().get();
+	}
+
+	public void setInfo(String info) {
+		this.infoProperty().set(info);
+	}
+    public BooleanProperty isCriticalProperty() {
+        return isCritical ;
+    }
+
+    public final boolean isCritical() {
+        return isCriticalProperty().get();
+    }
+
+    public final void setIsCritical(boolean isCritical) {
+        isCriticalProperty().set(isCritical);
+    }
+
+	public DoubleProperty workCompleteProperty() {
+		return this.workComplete;
+	}
+
+	public Double getWorkComplete() {
+		return this.workCompleteProperty().get();
+	}
+
+	public void setWorkComplete(Double workComplete) {
+		this.workCompleteProperty().set(workComplete);
+	}
+
+	public ObservableList<GanttTask> ganttTaskProperty() {
+		return ganttTasks;
+	  }
+
+	public TaskState getState() {
+		return state;
+	}
+
+	public void setState(TaskState state) {
+		this.state = state;
+	}
+
+	public IntegerProperty taskDurationProperty() {
+		return this.taskDuration;
+	}
+
+	public Integer gettaskDuration() {
+		return this.taskDurationProperty().get();
+	}
+
+	public void settaskDurationProperty(Integer taskDuration) {
+		this.taskDurationProperty().set(taskDuration);
+	}
+
+/* 	public String getId() {
 		return id;
 	}
 
@@ -129,6 +257,6 @@ public class GanttTask implements Cloneable, Serializable{
 
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
-	}
+	} */
 	
 }

@@ -49,18 +49,13 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
         this.endDay = (isNumberOfMonth) ? currentYearMonth.plusMonths(number).atEndOfMonth():
         today.plusDays(number);
         this.getStyleClass().add("timeline");
-        this.setItems(FXCollections.observableArrayList());
-
        return generate(startDay, endDay);
     }
 
     public TimelineWithGraphicView generate(LocalDate firstDay, LocalDate lastDay){
         // get list of days      
         setListOfDay(firstDay, lastDay);
-
-       //this.getChildren().addAll(menu, tableView);
-        setGanttPiece(new GanttTask("a", LocalDate.of(2022, 12, 21), LocalDate.of(2022, 12, 31), 1, true, "akjjaa"));
-       
+        getItems().add(new GanttTask());
         return this;
    }
 
@@ -70,7 +65,6 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
 				|| date.getDayOfWeek() == DayOfWeek.SUNDAY;
 	
     }
-
 
     public TableView<GanttTask> setListOfDay(LocalDate firstDay, LocalDate lastDay){
         //TableView<GanttTask> table = new TableView<GanttTask>();
@@ -108,19 +102,22 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
 
             // create week subcolumns
             weekColumn.getColumns().add(weekSubcolumn); 
-            //yearSubcolumn.getColumns().add(c);
-            //yearColumn.getStyleClass().add("table-view .column-header-background;");
-            getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);                     
+            weekColumn.getStyleClass().add("table-view");
         }
 
         return this;
     }
 
-   
+    public void setGanttPiece(ObservableList<GanttTask> ganttTasks ){
+         for(GanttTask ganttTask : ganttTasks){
+            setGanttPiece(ganttTask); 
+         }
+        
+    }
 
     public void setGanttPiece(GanttTask ganttTask){
         // add itemss
-        this.getItems().add(new GanttTask());
+        //this.getItems().add(ganttTask);
 
         // check if start and end are defined
         if(ganttTask.getStartDate() != null && ganttTask.getEndDate() != null){
@@ -140,7 +137,12 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
     }
   
     public TableColumn<GanttTask, GanttBarPiece> findDayColumn(LocalDate localDate){
-        return findDayColumn(localDate, true);
+        if(startDay.equals(localDate)){
+            return findDayColumn(localDate, false);
+        }else{
+            return findDayColumn(localDate, true);
+        }
+        
     }
 
     public TableColumn<GanttTask, GanttBarPiece> findDayColumn(LocalDate localDate, boolean chooseFirstDayOfWeek){
@@ -179,7 +181,11 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
 
     public void drawDiagram(TableColumn<GanttTask, GanttBarPiece> startColumn, TableColumn<GanttTask, GanttBarPiece> endColumn, String name){
         boolean isNextCenter = false;
-        for(TableColumn<GanttTask, ?> column : getColumns().stream()
+
+        if(startColumn.equals(endColumn)){
+            ((TableColumn<GanttTask, GanttBarPiece>)startColumn).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.COMPLET, name));
+        } else {
+            for(TableColumn<GanttTask, ?> column : getColumns().stream()
             .flatMap(e->e.getColumns().stream()).collect(Collectors.toList())){
                     if(column.equals(startColumn)){
                         isNextCenter = true;
@@ -192,6 +198,7 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
                         ((TableColumn<GanttTask, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.CENTER));
                     }
                 }
+        }
     }
 
     public DateTimeFormatter getDayFormatter() {

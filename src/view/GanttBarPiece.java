@@ -8,7 +8,8 @@ public class GanttBarPiece extends Pane {
 	public enum PieceType {
 		BEGINNING,
 		CENTER,
-		END
+		END,
+		COMPLET
 	}
 	
 	private PieceType type;
@@ -32,6 +33,10 @@ public class GanttBarPiece extends Pane {
 			break;
 		case END:
 			getStyleClass().add("gantt-piece-end");
+			break;
+		case COMPLET:
+			getStyleClass().add("gantt-piece-complet");
+			getChildren().add(new Label(name));
 			break;
 		}
 	}

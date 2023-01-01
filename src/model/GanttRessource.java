@@ -3,11 +3,19 @@ package model;
 import java.time.LocalDate;
 
 public class GanttRessource {
+
+    public enum RessourceType {
+		HUMAN,
+		MATERIAL
+    }
+
     private String id;
 	private String name;
 	private String role;
     private LocalDate startDate;
 	private LocalDate endDate;
+    private RessourceType type;
+
     
     public GanttRessource(String name, String role, LocalDate startDate, LocalDate endDate) {
         this.name = name;

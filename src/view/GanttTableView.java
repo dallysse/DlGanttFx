@@ -1,11 +1,8 @@
 package view;
 
 import java.time.LocalDate;
-import java.util.Collection;
 
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
@@ -15,47 +12,83 @@ import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import javafx.util.Callback;
 import model.GanttTask;
+import model.GanttTask.TaskState;
+import model.TaskPriority;
 
 public class GanttTableView extends TableView<GanttTask>{
 
-
-    private  ObservableList<GanttTask> row;
-    private  Collection<TableColumn<GanttTask, String>> column;
     private TableView<GanttTask> table= new TableView<GanttTask>();
     private BorderPane completeView;
-    private VBox details = new VBox();
-    private HBox lpHBox;
-    private Label lp= new Label("Low Priority");
-    private HBox mpHBox ;
-    private Label mp= new Label("Medium Priority");
-    private HBox hpHBox ;
-    private Label hp= new Label("Hight Priority");
-    private Rectangle rect1 = new Rectangle();
-    private Rectangle rect2 = new Rectangle();
-    private Rectangle rect3 = new Rectangle();
+    private GridPane legendBox = new GridPane();
+    private TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED) ;
+    private TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE) ;
+    private TaskPriority low = new TaskPriority(new Label("Low Priority"), Color.PALEGREEN) ;
+    private TimelineWithGraphicView graphicView;
+
+    private String taskName = "Task Name";
+    private String taskStart = "Task Start";
+    private String taskEnd = "Task End";
+    private String taskDuration = "Duration";
+    private String taskState = "Task State";
+    private String taskPriority = "Priority";
+    private String taskIsCritical = "IsCritical";
+    private String taskComplete = "Work Complete";
+    private String taskInfo = "Task Infos";
+
 
     public GanttTableView() {
-      //Creating columns
-      TableColumn< GanttTask, String> nameCol = new TableColumn< GanttTask, String> ("Task Name");
+
+    }
+
+    public GanttTableView generate () {
+        createGanttTaskTableView();
+        completeView = new BorderPane();
+        completeView.setCenter(this);
+        completeView.setBottom(legendBox);
+        addLegend();
+/* 
+    graphicView = new TimelineWithGraphicView();
+
+    this.getSelectionModel()
+        .selectedItemProperty()
+        .addListener(
+            (ObservableValue<? extends GanttTask> observable, GanttTask oldValue,
+            GanttTask newValue) -> {
+            if (observable != null && observable.getValue() != null) {
+                graphicView.setGanttPiece(newValue);
+            }
+          }) ; */
+
+          return this;
+    }
+
+    private void createGanttTaskTableView(){
+              //Creating columns
+      TableColumn< GanttTask, String> nameCol = new TableColumn< GanttTask, String> (taskName);
       nameCol.setCellValueFactory(new PropertyValueFactory<GanttTask, String>("name"));
 
-      TableColumn< GanttTask, LocalDate>  startCol = new TableColumn< GanttTask, LocalDate>("Task Start");
-      //startCol.setPrefWidth(100);
+      TableColumn< GanttTask, LocalDate>  startCol = new TableColumn< GanttTask, LocalDate>(taskStart);
       startCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
 
-      TableColumn< GanttTask, LocalDate> endCol = new TableColumn< GanttTask, LocalDate>("Task End");
-      //endCol.setPrefWidth(100);
+      TableColumn< GanttTask, LocalDate> endCol = new TableColumn< GanttTask, LocalDate>(taskEnd);
       endCol.setCellValueFactory(new PropertyValueFactory< GanttTask, LocalDate>("endDate"));
 
-      TableColumn< GanttTask, Integer> priorityCol = new TableColumn< GanttTask, Integer>("Priority");
-      priorityCol.setCellValueFactory(new PropertyValueFactory< GanttTask, Integer>("level"));
+      TableColumn< GanttTask, Integer> durationCol = new TableColumn< GanttTask, Integer>(taskDuration);
+      durationCol.setCellValueFactory(new PropertyValueFactory< GanttTask, Integer>("taskDuration"));
+
+
+      TableColumn< GanttTask, TaskState> stateCol = new TableColumn< GanttTask, TaskState>(taskState);
+      stateCol.setCellValueFactory(new PropertyValueFactory< GanttTask, TaskState>("state")); 
+
+      TableColumn< GanttTask, Integer> priorityCol = new TableColumn< GanttTask, Integer>(taskPriority);
+      priorityCol.setCellValueFactory(new PropertyValueFactory< GanttTask, Integer>("priority"));
       priorityCol.setCellFactory(column -> new TableCell<GanttTask, Integer>(){
         @Override
         protected void updateItem(Integer item, boolean empty) {
@@ -71,17 +104,17 @@ public class GanttTableView extends TableView<GanttTask>{
             } else {
                 switch(item){
                     case 3:
-                        rect.setFill(Color.PALEGREEN);  
-                        details.getChildren().add(rect);
+                        rect.setFill(low.getColor());  
+                        legendBox.getChildren().add(rect);
                         
                     break;
                     case 2:
-                        rect.setFill(Color.SKYBLUE);  
-                        details.getChildren().add(rect);
+                        rect.setFill(medium.getColor());  
+                        legendBox.getChildren().add(rect);
                     break;
                     case 1:
-                        rect.setFill(Color.PALEVIOLETRED);  
-                        details.getChildren().add(rect);
+                        rect.setFill(high.getColor());  
+                        legendBox.getChildren().add(rect);
                     break;
                 }
                 setGraphic(rect);
@@ -91,15 +124,13 @@ public class GanttTableView extends TableView<GanttTask>{
     });
 
  
-      TableColumn< GanttTask, Boolean> isCriticalCol = new TableColumn<GanttTask, Boolean> ("IsCritical");
+      TableColumn< GanttTask, Boolean> isCriticalCol = new TableColumn<GanttTask, Boolean> (taskIsCritical);
       isCriticalCol.setCellValueFactory(new PropertyValueFactory< GanttTask, Boolean>("isCritical"));
-      //isCriticalCol.setCellValueFactory(cellData -> cellData.getValue().getIsCritical());
-
-      //isCriticalCol.setCellFactory(CheckBoxTableCell.forTableColumn(isCriticalCol));
-
+      isCriticalCol.setCellValueFactory(cellData -> cellData.getValue().isCriticalProperty());
+      isCriticalCol.setCellFactory(CheckBoxTableCell.forTableColumn(isCriticalCol));
       isCriticalCol.setCellFactory(column -> new CheckBoxTableCell()); 
     
-      TableColumn< GanttTask, Double> workCompleteCol = new TableColumn<GanttTask, Double> ("Work Complete");
+      TableColumn< GanttTask, Double> workCompleteCol = new TableColumn<GanttTask, Double> (taskComplete);
       workCompleteCol.setCellValueFactory(new PropertyValueFactory<GanttTask, Double>(
         "workComplete"));
         workCompleteCol
@@ -128,114 +159,169 @@ public class GanttTableView extends TableView<GanttTask>{
         };
         workCompleteCol.setCellFactory(cellFactory);
 
-      TableColumn< GanttTask, String> statusCol = new TableColumn< GanttTask, String>("Task Infos");
-      statusCol.setCellValueFactory(new PropertyValueFactory< GanttTask, String>("status"));
-
-      TableColumn< GanttTask, String> infoCol = new TableColumn< GanttTask, String>("Task Infos");
+      TableColumn< GanttTask, String> infoCol = new TableColumn< GanttTask, String>(taskInfo);
       infoCol.setCellValueFactory(new PropertyValueFactory< GanttTask, String>("info"));
-
-     
-      //Adding data to the table
-      //this.setItems(activities);
-
-      //this.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-      this.getColumns().addAll(nameCol, startCol, endCol, priorityCol, isCriticalCol,workCompleteCol, infoCol);
-
-
-      this.getItems().add(new GanttTask("Kommentar", LocalDate.of(2015, 12, 31), LocalDate.of(2016, 12, 31), 1, true, "aaa"));
-      this.getItems().add(new GanttTask("a", LocalDate.of(2022, 12, 21), LocalDate.of(2022, 12, 31), 1, true, "akjjaa"));
-      this.getItems().add(new GanttTask("b", LocalDate.of(2023, 01, 14), LocalDate.of(2023, 12, 31), 2, false, "adfghaa"));
-      this.getItems().add(new GanttTask("c", LocalDate.of(2022, 12, 26), LocalDate.of(2022, 12, 30), 3, true, "aadsfa"));
-      this.getItems().add(new GanttTask("d", LocalDate.of(2022, 12, 27), LocalDate.of(2022, 12, 28), 3, false, "aadsfa"));
-
-      completeView = new BorderPane();
-      completeView.setCenter(this);
-      completeView.setBottom(details);
-
-
-      //echelle
-      rect1.setX(20); //setting the X coordinate of upper left //corner of rectangle   
-      rect1.setY(20); //setting the Y coordinate of upper left //corner of rectangle   
-      rect1.setWidth(20); //setting the width of rectangle   
-      rect1.setHeight(20); 
-      rect1.setFill(Color.PALEGREEN);  
-      lpHBox = new HBox (rect1, lp);
-      lpHBox.setSpacing(50);
-      HBox.setMargin(rect1, new Insets(10, 10, 10, 10));
-      HBox.setMargin(lp, new Insets(10, 10, 10, 10));
-
-
-      rect2.setX(20); //setting the X coordinate of upper left //corner of rectangle   
-      rect2.setY(20); //setting the Y coordinate of upper left //corner of rectangle   
-      rect2.setWidth(20); //setting the width of rectangle   
-      rect2.setHeight(20); 
-      rect2.setFill(Color.SKYBLUE);  
-      mpHBox = new HBox (rect2, mp);
-      mpHBox.setSpacing(50);
-      HBox.setMargin(rect2, new Insets(10, 10, 10, 10));
-      HBox.setMargin(mp, new Insets(10, 10, 10, 10));
-
-
-      rect3.setX(20); //setting the X coordinate of upper left //corner of rectangle   
-      rect3.setY(20); //setting the Y coordinate of upper left //corner of rectangle   
-      rect3.setWidth(20); //setting the width of rectangle   
-      rect3.setHeight(20); 
-      rect3.setFill(Color.PALEVIOLETRED);  
-      hpHBox = new HBox (rect3, hp);
-      hpHBox.setSpacing(50);
-      HBox.setMargin(rect3, new Insets(10, 10, 10, 10));
-      HBox.setMargin(hp, new Insets(10, 10, 10, 10));
-
-      details.getChildren().addAll(lpHBox, mpHBox, hpHBox);
-
-
+      
+       
+      this.getColumns().addAll(nameCol, startCol, endCol, durationCol, priorityCol, isCriticalCol,stateCol, workCompleteCol, infoCol);
     }
-    private void setPriorityStyle(int priority){
-        switch(priority){
-            case 3:
-                getStyleClass().add("priorityLow");
-                break;
-            case 2:
-                getStyleClass().add("priorityMedium");
-                break;
-            case 1:
-                getStyleClass().add("priorityHigh");
-                break;
-        }
-        System.out.println(getStyleClass());
+
+    private void addLegend(){
+      //legende
+      HBox lpHBox = createLegendElement(low);
+      HBox mpHBox = createLegendElement(medium);
+      HBox hpHBox = createLegendElement(high);
+
+      legendBox.add(lpHBox,0,0);
+      legendBox.add(mpHBox,1,0);
+      legendBox.add(hpHBox,2,0);
     }
-    public ObservableList<GanttTask> getRow() {
-        return row;
+
+    private HBox createLegendElement(TaskPriority priority){
+        Rectangle rect = new Rectangle();
+        rect.setX(20); //setting the X coordinate of upper left //corner of rectangle   
+        rect.setY(20); //setting the Y coordinate of upper left //corner of rectangle   
+        rect.setWidth(20); //setting the width of rectangle   
+        rect.setHeight(20); 
+        rect.setFill(priority.getColor());  
+        HBox hBox = new HBox (rect, priority.getLabel());
+        hBox.setSpacing(10);
+        GridPane.setHgrow(hBox, Priority.ALWAYS);
+        HBox.setMargin(rect, new Insets(5, 5, 5, 5));
+        HBox.setMargin(priority.getLabel(), new Insets(5, 5, 5, 5));
+
+        return hBox;
     }
-    public void setRow(ObservableList<GanttTask> row) {
-        this.row = row;
-    }
-    public Collection<TableColumn<GanttTask, String>> getColumn() {
-        return column;
-    }
-    public void setColumn(Collection<TableColumn<GanttTask, String>> column) {
-        this.column = column;
-    }
+
     public TableView<GanttTask> getTable() {
         return table;
     }
+
     public void setTable(TableView<GanttTask> table) {
         this.table = table;
     }
+
     public BorderPane getCompleteView() {
         return completeView;
     }
+
     public void setCompleteView(BorderPane completeView) {
         this.completeView = completeView;
     }
-    public VBox getDetails() {
-        return details;
-    }
-    public void setDetails(VBox details) {
-        this.details = details;
+
+    public GridPane getLegendBox() {
+        return legendBox;
     }
 
- 
+    public void setLegendBox(GridPane legendBox) {
+        this.legendBox = legendBox;
+    }
+
+    public TaskPriority getHigh() {
+        return high;
+    }
+
+    public void setHigh(TaskPriority high) {
+        this.high = high;
+    }
+
+    public TaskPriority getMedium() {
+        return medium;
+    }
+
+    public void setMedium(TaskPriority medium) {
+        this.medium = medium;
+    }
+
+    public TaskPriority getLow() {
+        return low;
+    }
+
+    public void setLow(TaskPriority low) {
+        this.low = low;
+    }
+
+    public TimelineWithGraphicView getGraphicView() {
+        return graphicView;
+    }
+
+    public void setGraphicView(TimelineWithGraphicView graphicView) {
+        this.graphicView = graphicView;
+    }
+
+    public String getTaskName() {
+        return taskName;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public String getTaskStart() {
+        return taskStart;
+    }
+
+    public void setTaskStart(String taskStart) {
+        this.taskStart = taskStart;
+    }
+
+    public String getTaskEnd() {
+        return taskEnd;
+    }
+
+    public void setTaskEnd(String taskEnd) {
+        this.taskEnd = taskEnd;
+    }
+
+    public String getTaskDuration() {
+        return taskDuration;
+    }
+
+    public void setTaskDuration(String taskDuration) {
+        this.taskDuration = taskDuration;
+    }
+
+    public String getTaskState() {
+        return taskState;
+    }
+
+    public void setTaskState(String taskState) {
+        this.taskState = taskState;
+    }
+
+    public String getTaskPriority() {
+        return taskPriority;
+    }
+
+    public void setTaskPriority(String taskPriority) {
+        this.taskPriority = taskPriority;
+    }
+
+    public String getTaskIsCritical() {
+        return taskIsCritical;
+    }
+
+    public void setTaskIsCritical(String taskIsCritical) {
+        this.taskIsCritical = taskIsCritical;
+    }
+
+    public String getTaskComplete() {
+        return taskComplete;
+    }
+
+    public void setTaskComplete(String taskComplete) {
+        this.taskComplete = taskComplete;
+    }
+
+    public String getTaskInfo() {
+        return taskInfo;
+    }
+
+    public void setTaskInfo(String taskInfo) {
+        this.taskInfo = taskInfo;
+    }
+
+   
 
 }
     

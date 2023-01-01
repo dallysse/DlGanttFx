@@ -11,6 +11,7 @@
     -fx-border-style:solid inside;
      -fx-border-width:2;
 } */
+
 /* .table-view .column-header-background{
     -fx-background-color: white;
 }
@@ -23,10 +24,10 @@
     -fx-border-radius:20;
     -fx-padding:7;
     -fx-font-size:18;
- } */
-.table-view .column-header {
-    -fx-border-style:solid ;
- }
+ }  */
+ .label {
+    -fx-label-padding: 1, 1, 1, 1;
+}
 
  .gantt-piece-beginning {	
 	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
@@ -47,12 +48,24 @@
 	-fx-border-width: 0;
 	-fx-background-radius: 0 5 5 0;
 }
+
+.gantt-piece-complet {
+	-fx-background-color: #468aff, #84b1ff, #468aff, #adcbff;
+	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
+	-fx-border-width: 0;
+	-fx-background-radius: 5 5 5 5;
+}
+
 .timeline {
 	-fx-table-cell-border-color: transparent;
 	-fx-table-cell-border-width: 0px;
     -fx-background-color: #dad5d0;
 
 }
+
+.timeline .column-header {
+    -fx-border-style:solid ;
+ }
 
 .timeline .table-column {
 	-fx-padding: 5 0 3 0;
@@ -66,57 +79,6 @@
     -fx-background-radius: 1;
 }
 
-/* .table-view .table-cell{
-    -fx-text-fill: black;
-    -fx-font-size:15;
-    -fx-alignment:center;
-    -fx-border-style:solid inside;
-    -fx-border-width:1;
-}
-
-.table-row-cell:focused, .table-cell:focused{
-    -fx-text-fill: red;
-}
-.table-row-cell{
-    -fx-background-color: -fx-primary;
-    -fx-border-color: black;
-    -fx-table-cell-border-color: transparent;
- }
-
-.table-row-cell:empty{
-    -fx-background-color:white;
-    -fx-border-color: transparent;
-    -fx-table-cell-border-color: transparent;
- }
-
-.table-column{
-    -fx-alignment: CENTER;
- }
-.table-row-cell:even{
-    -fx-background-color: derive(white, -10%);
- }
-.table-row-cell:odd{
-     -fx-background-color: white;
- }
- .table-row-cell:even:hover{
-     -fx-background-color:pink;
- }
- .table-row-cell:odd:hover{
-    -fx-background-color: skyblue;
- }
-
-.table-row-cell:even:empty{
-    -fx-background-color: white;
-}
-.table-row-cell:odd:empty{
-    -fx-background-color: white;
-}
-
-.table-row-cell:selected {
-    -fx-background-color: black;
-    -fx-text-fill: white;
-    -fx-background-insets: 0;
- }
 .table-row-cell:selected .table-cell{
     -fx-text-fill: white;
- } */
+ } 
