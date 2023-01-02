@@ -12,8 +12,8 @@ public class ResourceChart  {
 
     private BorderPane graphicView;
     private SplitPane viewGantt;
-    private TimelineView timelineView;
     private GanttTableView ganttTableView;
+    private TimelineWithGraphicView timelineWithGraphicView; 
     private GanttMenu menu;
  
     public ResourceChart(){
@@ -22,27 +22,25 @@ public class ResourceChart  {
         ganttTableView = new GanttResourceView().generate();
         ganttTableView.setItems(resources);
 
-        //timelineWithGraphicView = new TimelineWithGraphicView().init(13, true);
-        //timelineWithGraphicView.setGanttPiece(resources);
+        timelineWithGraphicView = new TimelineResourceWithGraphicView().init(13, true);
+        timelineWithGraphicView.setGanttPiece(resources);
 
-        //graphicView=new BorderPane();
-        //menu = new GanttMenu().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView);
-        //graphicView.setTop(menu);  
-        //graphicView.setCenter(timelineWithGraphicView);     
+        graphicView=new BorderPane();
+        menu = new GanttMenu().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView);
+        graphicView.setTop(menu);  
+        graphicView.setCenter(timelineWithGraphicView);     
 
-        //viewGantt = new SplitPane(ganttTableView.getCompleteView(), graphicView);
-        viewGantt = new SplitPane( ganttTableView);
-
+        viewGantt = new SplitPane(ganttTableView.getCompleteView(), graphicView);
     }
 
     private ObservableList<GanttResource> addGanttResources() {
          ObservableList<GanttResource> resources = FXCollections
         .<GanttResource> observableArrayList();
         GanttResource resource1 = new GanttResource("Martin", LocalDate.of(2023, 02, 17), LocalDate.of(2023, 02, 26),   "Font End", "Designer");
-        GanttResource resource2 =new GanttResource("Sven", LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 01), "Back End", "Architect");
+        GanttResource resource2 =new GanttResource("Sven", LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 19), "Back End", "Architect");
         GanttResource resource3 =new GanttResource("Ursel", LocalDate.of(2023, 04, 26), LocalDate.of(2023, 05, 30), "Back End", "Developper");
         GanttResource resource4 =new GanttResource("Olaf", LocalDate.of(2023, 12, 27), LocalDate.of(2024, 02, 7), "Back End", "Security Architect");    
-            resources.addAll(resource1, resource2, resource3, resource4);
+        resources.addAll(resource1, resource2, resource3, resource4);
         return resources;
     }
 
@@ -54,16 +52,6 @@ public class ResourceChart  {
     public void setGraphicView(BorderPane view) {
         this.graphicView = view;
     }
-
-    public TimelineView getTimelineView() {
-        return timelineView;
-    }
-
-
-    public void setTimelineView(TimelineView timelineView) {
-        this.timelineView = timelineView;
-    }
-
 
     public SplitPane getViewGantt() {
         return viewGantt;

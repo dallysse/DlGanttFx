@@ -1,6 +1,4 @@
 
-
-
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.GanttChart;
@@ -18,8 +16,8 @@ public class App extends Application {
 		ResourceChart resourceChart = new ResourceChart();
 
 		try {
-			//Scene scene = new Scene(resourceChart.getViewGantt());
-			Scene scene = new Scene(ganttChart.getViewGantt());
+			Scene scene = new Scene(resourceChart.getViewGantt());
+			//Scene scene = new Scene(ganttChart.getViewGantt());
 			scene.getStylesheets().add(getClass().getResource("/css/gantt.css").toExternalForm());
 			primaryStage.setTitle("Ganttchart");
 			primaryStage.setScene(scene);

@@ -9,11 +9,6 @@ import javafx.beans.property.StringProperty;
 
 public class GanttResource extends GanttData {
 
-    public enum RessourceType {
-		HUMAN,
-		MATERIAL
-    }
-
     private SimpleStringProperty role;
     private SimpleObjectProperty type;
    
@@ -42,15 +37,15 @@ public class GanttResource extends GanttData {
 		this.roleProperty().set(role);
 	}
 
-	public ObjectProperty<RessourceType> typeProperty() {
+	public ObjectProperty<ResourceType> typeProperty() {
 		return this.type;
 	}
 
-	public RessourceType getType() {
+	public ResourceType getType() {
 		return this.typeProperty().get();
 	}
 
-	public void setType( RessourceType type) {
+	public void setType( ResourceType type) {
 		this.typeProperty().set(type);
 	}
     

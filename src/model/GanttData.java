@@ -14,12 +14,6 @@ import javafx.beans.property.StringProperty;
 
 public class GanttData {
 
-	public enum State {
-		RUNNING,
-		HALTED,
-		TERMINATED
-	}
-
 	protected IntegerProperty id;
 	protected StringProperty name;
 	protected ObjectProperty<LocalDate> startDate;

@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import model.GanttData;
 import model.GanttTask;
 
 public class GanttMenu extends HBox{
@@ -39,7 +40,7 @@ public class GanttMenu extends HBox{
     }
 
 
-    public GanttMenu init(LocalDate firstDay, LocalDate lastDay, TimelineWithGraphicView tableView){
+    public GanttMenu init(LocalDate firstDay, LocalDate lastDay, TimelineWithGraphicView<GanttData> tableView){
 
         // get list of years
         ListView<Integer> yearlist = getListOfYears(firstDay, lastDay);
@@ -107,14 +108,14 @@ public class GanttMenu extends HBox{
     }
         // events
 
-    public void scrollToFirstDayOfYearsEvent(ListView<Integer> yearlist, TimelineWithGraphicView tableView){
+    public void scrollToFirstDayOfYearsEvent(ListView<Integer> yearlist, TimelineWithGraphicView<GanttData> tableView){
         yearlist.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
                 int selectedYear = yearlist.getSelectionModel().getSelectedItem();
                 
-                List<TableColumn<GanttTask, ?>> columnOfSelectedYearList= tableView.getColumns().stream()
+                List<TableColumn<GanttData, ?>> columnOfSelectedYearList= tableView.getColumns().stream()
                 .filter(e-> e.getText() != null &&  e.getText().contains(String.valueOf(selectedYear)))
                 .collect(Collectors.toList());
 

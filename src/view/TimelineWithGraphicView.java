@@ -9,16 +9,19 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import model.GanttTask;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.scene.paint.Color;
+import javafx.util.Callback;
+import model.GanttData;
 import view.GanttBarPiece.PieceType;
 
 
-public class TimelineWithGraphicView extends TableView<GanttTask> {
+public abstract class TimelineWithGraphicView <T extends GanttData>extends TableView<T> {
 
    // formats
     private DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\n dd "); 
@@ -42,7 +45,7 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
      * @param isNumberOfMonth
      * @return
      */
-    public TimelineWithGraphicView init(int number, boolean isNumberOfMonth) {
+    public TimelineWithGraphicView<T> init(int number, boolean isNumberOfMonth) {
         currentYearMonth = YearMonth.now();
         LocalDate today = LocalDate.now() ;
         this.startDay = (isNumberOfMonth) ? currentYearMonth.atDay(1) : today;
@@ -52,13 +55,12 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
        return generate(startDay, endDay);
     }
 
-    public TimelineWithGraphicView generate(LocalDate firstDay, LocalDate lastDay){
+    public TimelineWithGraphicView<T> generate(LocalDate firstDay, LocalDate lastDay){
         // get list of days      
         setListOfDay(firstDay, lastDay);
-        getItems().add(new GanttTask());
+        // getItems().add((T) new GanttData());
         return this;
    }
-
 
     public static boolean isWeekend(LocalDate date) {
 		return date.getDayOfWeek() == DayOfWeek.SATURDAY 
@@ -66,14 +68,13 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
 	
     }
 
-    public TableView<GanttTask> setListOfDay(LocalDate firstDay, LocalDate lastDay){
-        //TableView<GanttTask> table = new TableView<GanttTask>();
+    public TableView<T> setListOfDay(LocalDate firstDay, LocalDate lastDay){
 
         WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
         int weekNumber = firstDay.get(weekFields.weekOfWeekBasedYear());
 
         // get first week
-        TableColumn<GanttTask, GanttBarPiece> weekColumn=new TableColumn<GanttTask, GanttBarPiece>("W" + weekNumber + ", " + firstDay.format(weekFormatter));
+        TableColumn<T, GanttBarPiece> weekColumn=new TableColumn<T, GanttBarPiece>("W" + weekNumber + ", " + firstDay.format(weekFormatter));
         
         // add first week column
         getColumns().add(weekColumn);
@@ -88,55 +89,56 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
                 weekNumber = currentWeeknumber;
 
                 // create a new week column 
-                weekColumn=new TableColumn<GanttTask, GanttBarPiece>("W" + weekNumber+ ", " + date.format(weekFormatter));
+                weekColumn=new TableColumn<T, GanttBarPiece>("W" + weekNumber+ ", " + date.format(weekFormatter));
 
                 // add week column and subcolumns to the table
                 getColumns().add(weekColumn);
             }
 
-            TableColumn<GanttTask, GanttBarPiece> weekSubcolumn=new TableColumn<GanttTask, GanttBarPiece>(date.format(dayFormatter));
+            TableColumn<T, GanttBarPiece> weekSubcolumn=new TableColumn<T, GanttBarPiece>(date.format(dayFormatter));
 
             if(isWeekend(date)){
-                weekSubcolumn.setStyle(String.format(styleFormat, weekendColor));
+                
+                //weekSubcolumn.setStyle(String.format(styleFormat, weekendColor));
+                weekSubcolumn.getStyleClass().add("WeekendColor");
+
             }
 
             // create week subcolumns
             weekColumn.getColumns().add(weekSubcolumn); 
-            weekColumn.getStyleClass().add("table-view");
         }
 
         return this;
     }
 
-    public void setGanttPiece(ObservableList<GanttTask> ganttTasks ){
-         for(GanttTask ganttTask : ganttTasks){
-            setGanttPiece(ganttTask); 
+    public void setGanttPiece(ObservableList<T> ganttTasks ){
+        //this.setItems(ganttTasks);
+
+         for(T ganttData : ganttTasks){
+            setGanttPiece(ganttData); 
          }
         
     }
 
-    public void setGanttPiece(GanttTask ganttTask){
-        // add itemss
-        //this.getItems().add(ganttTask);
-
+    public void setGanttPiece(T ganttData){
         // check if start and end are defined
-        if(ganttTask.getStartDate() != null && ganttTask.getEndDate() != null){
-            TableColumn<GanttTask, GanttBarPiece> firstColumn = findDayColumn (ganttTask.getStartDate());
-            TableColumn<GanttTask, GanttBarPiece> lastColumn = findDayColumn (ganttTask.getEndDate());
+        if(ganttData.getStartDate() != null && ganttData.getEndDate() != null){
+            TableColumn<T, GanttBarPiece> firstColumn = findDayColumn (ganttData.getStartDate());
+            TableColumn<T, GanttBarPiece> lastColumn = findDayColumn (ganttData.getEndDate());
 
             if(firstColumn != null && lastColumn != null){
                 // draw diagram
-                drawDiagram(firstColumn, lastColumn, ganttTask.getName());
+                drawDiagram(firstColumn, lastColumn, ganttData);
                 
 
             } else {
-                System.err.println(String.format("gantt piece could not be defined. reason: At least one column could not be found for start: %s end: %s", ganttTask.getStartDate(), ganttTask.getEndDate()));
+                System.err.println(String.format("gantt piece could not be defined. reason: At least one column could not be found for start: %s end: %s", ganttData.getStartDate(), ganttData.getEndDate()));
             }
         } 
         
     }
   
-    public TableColumn<GanttTask, GanttBarPiece> findDayColumn(LocalDate localDate){
+    public TableColumn<T, GanttBarPiece> findDayColumn(LocalDate localDate){
         if(startDay.equals(localDate)){
             return findDayColumn(localDate, false);
         }else{
@@ -145,7 +147,7 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
         
     }
 
-    public TableColumn<GanttTask, GanttBarPiece> findDayColumn(LocalDate localDate, boolean chooseFirstDayOfWeek){
+    public TableColumn<T, GanttBarPiece> findDayColumn(LocalDate localDate, boolean chooseFirstDayOfWeek){
         WeekFields weekFields = WeekFields.of(Locale.getDefault()); 
         int weekNumber = localDate.get(weekFields.weekOfWeekBasedYear());
         int dayOfWeek = localDate.getDayOfWeek().getValue();
@@ -153,17 +155,17 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
         // find week column
         String weekColumnName = (chooseFirstDayOfWeek) ? "W" + weekNumber + ", " + localDate.minusDays(dayOfWeek - 1).format(weekFormatter) :
         "W" + weekNumber + ", " + localDate.format(weekFormatter);
-        Optional<TableColumn<GanttTask, ?>> weekColumnOpt = findDayColumn(this.getColumns(), weekColumnName);
+        Optional<TableColumn<T, ?>> weekColumnOpt = findDayColumn(this.getColumns(), weekColumnName);
 
         // check if the week column exists
         if(weekColumnOpt.isPresent()) {
             String weekSubcolumnName = localDate.format(dayFormatter);
 
             // find day column
-            Optional<TableColumn<GanttTask, ?>> weekSubcolumn = findDayColumn(weekColumnOpt.get().getColumns(), weekSubcolumnName);
+            Optional<TableColumn<T, ?>> weekSubcolumn = findDayColumn(weekColumnOpt.get().getColumns(), weekSubcolumnName);
 
             if(weekSubcolumn.isPresent()){
-                return (TableColumn<GanttTask, GanttBarPiece>) weekSubcolumn.get();
+                return (TableColumn<T, GanttBarPiece>) weekSubcolumn.get();
             } else {
             System.err.println(String.format("Day column '%s' could not be found", weekColumnName));
             }
@@ -174,32 +176,36 @@ public class TimelineWithGraphicView extends TableView<GanttTask> {
         return null;
     }
 
-    private Optional<TableColumn<GanttTask, ?>> findDayColumn(ObservableList<TableColumn<GanttTask,?>> columns, String columnName){
+    private Optional<TableColumn<T, ?>> findDayColumn(ObservableList<TableColumn<T,?>> columns, String columnName){
         return columns.stream()
         .filter(e -> e.getText() != null && e.getText().equalsIgnoreCase(columnName)).findFirst();
     }
 
-    public void drawDiagram(TableColumn<GanttTask, GanttBarPiece> startColumn, TableColumn<GanttTask, GanttBarPiece> endColumn, String name){
+    public void drawDiagram(TableColumn<T, GanttBarPiece> startColumn, TableColumn<T, GanttBarPiece> endColumn, T ganttData){
         boolean isNextCenter = false;
 
+        // add itemss
+        this.getItems().add(ganttData);
+
         if(startColumn.equals(endColumn)){
-            ((TableColumn<GanttTask, GanttBarPiece>)startColumn).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.COMPLET, name));
+            ((TableColumn<T, GanttBarPiece>)startColumn).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.COMPLET, ganttData.getName()));
         } else {
-            for(TableColumn<GanttTask, ?> column : getColumns().stream()
+            for(TableColumn<T, ?> column : getColumns().stream()
             .flatMap(e->e.getColumns().stream()).collect(Collectors.toList())){
                     if(column.equals(startColumn)){
                         isNextCenter = true;
-                        ((TableColumn<GanttTask, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.BEGINNING, name));
+                        ((TableColumn<T, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.BEGINNING, ganttData.getName()));
                     } else if(column.equals(endColumn)){
                         isNextCenter = false;
-                        ((TableColumn<GanttTask, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.END));
+                        ((TableColumn<T, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.END));
                         break;
                     } else if (isNextCenter) {
-                        ((TableColumn<GanttTask, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.CENTER));
+                        ((TableColumn<T, GanttBarPiece>)column).setCellValueFactory(e-> new ObservableGanttBarPiece(PieceType.CENTER));
                     }
                 }
         }
     }
+    
 
     public DateTimeFormatter getDayFormatter() {
         return dayFormatter;

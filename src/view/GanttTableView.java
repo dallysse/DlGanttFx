@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import model.TaskPriority;
-import model.GanttData.State;
+import model.State;
 
 public abstract class GanttTableView<T> extends TableView<T>{
 
@@ -78,7 +78,7 @@ public abstract class GanttTableView<T> extends TableView<T>{
         durationCol.setCellValueFactory(new PropertyValueFactory< T, Integer>("duration"));
 
 
-        TableColumn< T, State> stateCol = new TableColumn< T, State>(state);
+        TableColumn< T, model.State> stateCol = new TableColumn< T, State>(state);
         stateCol.setCellValueFactory(new PropertyValueFactory< T, State>("state")); 
 
         TableColumn< T, Double> workCompleteCol = new TableColumn<T, Double> (complete);
