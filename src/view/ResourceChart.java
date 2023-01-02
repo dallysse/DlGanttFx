@@ -38,10 +38,10 @@ public class ResourceChart  {
     private ObservableList<GanttResource> addGanttResources() {
          ObservableList<GanttResource> resources = FXCollections
         .<GanttResource> observableArrayList();
-        GanttResource resource1 = new GanttResource("Designer", LocalDate.of(2023, 02, 17), LocalDate.of(2023, 02, 26),   "aaa", "Person");
-        GanttResource resource2 =new GanttResource("Architect", LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 01), "adfghaa", "Person");
-        GanttResource resource3 =new GanttResource("Developper", LocalDate.of(2023, 04, 26), LocalDate.of(2023, 05, 30), "aadsfa", "Person");
-        GanttResource resource4 =new GanttResource("Security Architect", LocalDate.of(2023, 12, 27), LocalDate.of(2024, 02, 7), "aadsfa", "Machine");    
+        GanttResource resource1 = new GanttResource("Martin", LocalDate.of(2023, 02, 17), LocalDate.of(2023, 02, 26),   "Font End", "Designer");
+        GanttResource resource2 =new GanttResource("Sven", LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 01), "Back End", "Architect");
+        GanttResource resource3 =new GanttResource("Ursel", LocalDate.of(2023, 04, 26), LocalDate.of(2023, 05, 30), "Back End", "Developper");
+        GanttResource resource4 =new GanttResource("Olaf", LocalDate.of(2023, 12, 27), LocalDate.of(2024, 02, 7), "Back End", "Security Architect");    
             resources.addAll(resource1, resource2, resource3, resource4);
         return resources;
     }

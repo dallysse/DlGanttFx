@@ -5,16 +5,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import model.GanttResource;
 public class GanttResourceView extends GanttTableView<GanttResource> {
     
-    private String role = "Role Resource";  
+    private String role = "Role";  
 
 
     public GanttResourceView(){
         super();
         this.name = "Resource Name";
-        this.start = "Resource Start";
-        this.end = "Resource End";
-        this.duration = "Resource Duration";
-        this.state = "Resource State";
+        this.start = " Start";
+        this.end = " End";
+        this.duration = "Duration";
+        this.state = "State";
         this.info = "Resource Infos";
     }
 

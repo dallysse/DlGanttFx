@@ -36,10 +36,10 @@ public class GanttChart  {
     private ObservableList<GanttTask> addGanttTasks() {
          ObservableList<GanttTask> ganttTasks = FXCollections
         .<GanttTask> observableArrayList();
-            GanttTask ganttTask1 = new GanttTask("Erstellung des Mockups", LocalDate.of(2023, 02, 17), LocalDate.of(2023, 02, 26), 1, true,  "aaa");
-            GanttTask ganttTask2 =new GanttTask("Aufbau der Architektur", LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 01), 2, false, "adfghaa");
-            GanttTask ganttTask3 =new GanttTask("Erstellung der Datenmodel", LocalDate.of(2023, 04, 26), LocalDate.of(2023, 05, 30), 3, true, "aadsfa");
-            GanttTask ganttTask4 =new GanttTask("Implementierung eines Prototyps", LocalDate.of(2023, 12, 27), LocalDate.of(2024, 02, 7), 3, false, "aadsfa");    
+            GanttTask ganttTask1 = new GanttTask("Erstellung des Mockups", LocalDate.of(2023, 02, 17), LocalDate.of(2023, 02, 26), 1, true,  " Mockup erstellen");
+            GanttTask ganttTask2 =new GanttTask("Aufbau der Architektur", LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 01), 2, false, "Arbeit struktirieren");
+            GanttTask ganttTask3 =new GanttTask("Erstellung der Datenmodel", LocalDate.of(2023, 04, 26), LocalDate.of(2023, 05, 30), 3, true, "Daten Bank erstellen");
+            GanttTask ganttTask4 =new GanttTask("Implementierung eines Prototyps", LocalDate.of(2023, 12, 27), LocalDate.of(2024, 02, 7), 3, false, "Prototyp implementieren");    
         ganttTasks.addAll(ganttTask1, ganttTask2, ganttTask3, ganttTask4);
         return ganttTasks;
     }
