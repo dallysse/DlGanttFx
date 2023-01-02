@@ -2,52 +2,35 @@ package view;
 
 import java.time.LocalDate;
 
-import javax.swing.text.TabableView;
-
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import model.GanttTask;
-import model.GanttTask.TaskState;
 
 public class GanttChart  {
-    private BorderPane view=new BorderPane();
+    private BorderPane graphicView;
     private SplitPane viewGantt;
-    private VBox taskview = new VBox();
     private TimelineView timelineView;
-    private GridPane root=new GridPane();;  
     private GanttTableView ganttTableView;
     private TimelineWithGraphicView timelineWithGraphicView; 
+    private GanttMenu menu;
  
-
-
-
     public GanttChart(){
-        //VBox sp1 = new VBox();
-        //sp1=new VBox(new Button("Button One"));
+ 
         ObservableList<GanttTask> ganttTasks = addGanttTasks();
-        ganttTableView = new GanttTableView().generate();
+        ganttTableView = new GanttTaskView().generate();
         ganttTableView.setItems(ganttTasks);
 
         timelineWithGraphicView = new TimelineWithGraphicView().init(13, true);
         timelineWithGraphicView.setGanttPiece(ganttTasks);
-        
 
-        root.addRow(1, timelineWithGraphicView);  
-        root.addRow(0, new GanttMenu().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView));  
+        graphicView=new BorderPane();
+        menu = new GanttMenu().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView);
+        graphicView.setTop(menu);  
+        graphicView.setCenter(timelineWithGraphicView);     
 
-        //view.setTop();
-        //view = new BorderPane(new TimelineView().init(13, true));
-        viewGantt = new SplitPane(ganttTableView.getCompleteView(), root);
+        viewGantt = new SplitPane(ganttTableView.getCompleteView(), graphicView);
     }
 
     private ObservableList<GanttTask> addGanttTasks() {
@@ -61,25 +44,14 @@ public class GanttChart  {
         return ganttTasks;
     }
 
-    public BorderPane getView() {
-        return view;
+    public BorderPane getGraphicView() {
+        return graphicView;
     }
 
 
-    public void setView(BorderPane view) {
-        this.view = view;
+    public void setGraphicView(BorderPane view) {
+        this.graphicView = view;
     }
-
-
-    public VBox getTaskview() {
-        return taskview;
-    }
-
-
-    public void setTaskview(VBox taskview) {
-        this.taskview = taskview;
-    }
-
 
     public TimelineView getTimelineView() {
         return timelineView;

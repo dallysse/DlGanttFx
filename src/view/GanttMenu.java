@@ -50,7 +50,12 @@ public class GanttMenu extends HBox{
           Button now = new Button(nowLabel);
   
           // go to now
-          scrollToGivenDate(now, LocalDate.now(), tableView, true);
+          LocalDate nowDate = LocalDate.now();
+          if(nowDate.equals(firstDay)){
+            scrollToGivenDate(now, nowDate, tableView, false);
+          } else {
+            scrollToGivenDate(now, nowDate, tableView, true);
+          }
   
           Button earliest = new Button(earliestLabel);
   

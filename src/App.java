@@ -4,6 +4,7 @@
 import javafx.application.Application;
 import javafx.stage.Stage;
 import view.GanttChart;
+import view.ResourceChart;
 import javafx.scene.Scene;
 
 public class App extends Application {  
@@ -14,11 +15,12 @@ public class App extends Application {
 
 	public void start(Stage primaryStage) {
 		GanttChart ganttChart = new GanttChart();
+		ResourceChart resourceChart = new ResourceChart();
 
 		try {
-			Scene scene = new Scene(ganttChart.getViewGantt());
+			Scene scene = new Scene(resourceChart.getViewGantt());
+			//Scene scene = new Scene(ganttChart.getViewGantt());
 			scene.getStylesheets().add(getClass().getResource("/css/gantt.css").toExternalForm());
-			ganttChart = new GanttChart();
 			primaryStage.setTitle("Ganttchart");
 			primaryStage.setScene(scene);
 			primaryStage.show();
