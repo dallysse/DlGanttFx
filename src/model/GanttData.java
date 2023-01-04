@@ -23,42 +23,49 @@ public class GanttData {
 	protected IntegerProperty duration;
 	protected State state;
 
-	public GanttData() {}
-	
+	public GanttData() {
+	}
+
 	public GanttData(String name, LocalDate startDate, LocalDate endDate) {
 		this.name = new SimpleStringProperty(name);
 		this.startDate = new SimpleObjectProperty<>(startDate);
 		this.endDate = new SimpleObjectProperty<>(endDate);
 		double totalWorkingDays = Duration.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toDays() + 1;
 		this.duration = new SimpleIntegerProperty((int) totalWorkingDays);
-		if(startDate == null || endDate == null || LocalDate.now().isBefore(startDate)){
+		if (startDate == null || endDate == null || LocalDate.now().isBefore(startDate)) {
 			this.workComplete = new SimpleDoubleProperty(0.0);
 		} else if (LocalDate.now().isAfter(endDate)) {
 			this.workComplete = new SimpleDoubleProperty(1.0);
 		} else {
-			this.workComplete = new SimpleDoubleProperty((double) (Duration.between( startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1) / totalWorkingDays) ;
+			this.workComplete = new SimpleDoubleProperty(
+					(double) (Duration.between(startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1)
+							/ totalWorkingDays);
 		}
 
-		this.state = (workComplete == null || workComplete.get() == 0.0) ? State.HALTED : ((workComplete.get() == 1.0) ? State.TERMINATED : State.RUNNING) ;
+		this.state = (workComplete == null || workComplete.get() == 0.0) ? State.HALTED
+				: ((workComplete.get() == 1.0) ? State.TERMINATED : State.RUNNING);
 	}
-		
+
 	public GanttData(String name, LocalDate startDate, LocalDate endDate, String info) {
 		this.name = new SimpleStringProperty(name);
 		this.startDate = new SimpleObjectProperty<>(startDate);
 		this.endDate = new SimpleObjectProperty<>(endDate);
 		double totalWorkingDays = Duration.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toDays() + 1;
 		this.duration = new SimpleIntegerProperty((int) totalWorkingDays);
-		if(startDate == null || endDate == null || LocalDate.now().isBefore(startDate)){
+		if (startDate == null || endDate == null || LocalDate.now().isBefore(startDate)) {
 			this.workComplete = new SimpleDoubleProperty(0.0);
 		} else if (LocalDate.now().isAfter(endDate)) {
 			this.workComplete = new SimpleDoubleProperty(1.0);
 		} else {
-			this.workComplete = new SimpleDoubleProperty((double) (Duration.between( startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1) / totalWorkingDays) ;
+			this.workComplete = new SimpleDoubleProperty(
+					(double) (Duration.between(startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1)
+							/ totalWorkingDays);
 		}
-		this.state = (workComplete == null || workComplete.get() == 0.0) ? State.HALTED : ((workComplete.get() == 1.0) ? State.TERMINATED : State.RUNNING) ;
+		this.state = (workComplete == null || workComplete.get() == 0.0) ? State.HALTED
+				: ((workComplete.get() == 1.0) ? State.TERMINATED : State.RUNNING);
 		this.info = new SimpleStringProperty(info);
 	}
-	
+
 	public StringProperty nameProperty() {
 		return this.name;
 	}
@@ -79,10 +86,9 @@ public class GanttData {
 		return this.startDateProperty().get();
 	}
 
-	public void setStartDate( LocalDate startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDateProperty().set(startDate);
 	}
-
 
 	public ObjectProperty<LocalDate> endDateProperty() {
 		return this.endDate;
@@ -95,7 +101,7 @@ public class GanttData {
 	public void setEndDate(final LocalDate endDate) {
 		this.endDateProperty().set(endDate);
 	}
-	
+
 	public StringProperty infoProperty() {
 		return this.info;
 	}
@@ -139,5 +145,5 @@ public class GanttData {
 	public void setdurationProperty(Integer duration) {
 		this.durationProperty().set(duration);
 	}
-	
+
 }

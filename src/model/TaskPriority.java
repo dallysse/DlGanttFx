@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 public class TaskPriority {
     private Label label;
     private Color color;
-    
+
     public TaskPriority(Label label, Color color) {
         this.label = label;
         this.color = color;
@@ -28,5 +28,4 @@ public class TaskPriority {
         this.color = color;
     }
 
-    
 }

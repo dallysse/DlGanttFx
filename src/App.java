@@ -5,9 +5,11 @@ import view.GanttChart;
 import view.ResourceChart;
 import javafx.scene.Scene;
 
-public class App extends Application {  
+public class App extends Application {
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 */
 
@@ -16,18 +18,18 @@ public class App extends Application {
 		ResourceChart resourceChart = new ResourceChart();
 
 		try {
-			Scene scene = new Scene(resourceChart.getViewGantt());
-			//Scene scene = new Scene(ganttChart.getViewGantt());
+			//Scene scene = new Scene(resourceChart.getResourceChartWithMenu());
+			Scene scene = new Scene(ganttChart.getGanttChartWithMenu());
 			scene.getStylesheets().add(getClass().getResource("/css/gantt.css").toExternalForm());
 			primaryStage.setTitle("Ganttchart");
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void main(String[] args) {
-		launch(args); 
-  }   
-} 
+		launch(args);
+	}
+}

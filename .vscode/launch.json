@@ -4,13 +4,22 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
+        {
+            "type": "java",
+            "name": "Launch App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "DlGanttFx_dbb502bf",
+            "vmArgs": "--module-path /Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib --add-modules javafx.controls,javafx.fxml"
+
+        },
         {
             "type": "java",
             "name": "Launch GanttChart",
             "request": "launch",
             "mainClass": "view.GanttChart",
             "vmArgs": "--module-path /Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib --add-modules javafx.controls,javafx.fxml",
-
             "projectName": "DlGanttFX_ce16653b"
         },
         {

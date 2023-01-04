@@ -20,13 +20,13 @@ import javafx.util.Callback;
 import model.TaskPriority;
 import model.State;
 
-public abstract class GanttTableView<T> extends TableView<T>{
+public abstract class GanttTableView<T> extends TableView<T> {
 
-    private BorderPane completeView;
+    private BorderPane tableWithLegendView;
     protected GridPane legendBox = new GridPane();
-    protected TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED) ;
-    protected TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE) ;
-    protected TaskPriority low = new TaskPriority(new Label("Low Priority"), Color.PALEGREEN) ;
+    protected TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED);
+    protected TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE);
+    protected TaskPriority low = new TaskPriority(new Label("Low Priority"), Color.PALEGREEN);
 
     protected String name = "Name";
     protected String start = "Start";
@@ -36,59 +36,57 @@ public abstract class GanttTableView<T> extends TableView<T>{
     protected String complete = "Work Complete";
     protected String info = "Infos";
 
-
     public GanttTableView() {
 
     }
 
-    public GanttTableView<T> generate () {
+    public GanttTableView<T> generate() {
         createGanttTableView();
-        completeView = new BorderPane();
-        completeView.setCenter(this);
-        completeView.setBottom(legendBox);
+        tableWithLegendView = new BorderPane();
+        tableWithLegendView.setCenter(this);
+        tableWithLegendView.setBottom(legendBox);
         addLegend();
-/* 
-    graphicView = new TimelineWithGraphicView();
+        /*
+         * graphicView = new TimelineWithGraphicView();
+         * 
+         * this.getSelectionModel()
+         * .selectedItemProperty()
+         * .addListener(
+         * (ObservableValue<? extends T> observable, T oldValue,
+         * T newValue) -> {
+         * if (observable != null && observable.getValue() != null) {
+         * graphicView.setGanttPiece(newValue);
+         * }
+         * }) ;
+         */
 
-    this.getSelectionModel()
-        .selectedItemProperty()
-        .addListener(
-            (ObservableValue<? extends T> observable, T oldValue,
-            T newValue) -> {
-            if (observable != null && observable.getValue() != null) {
-                graphicView.setGanttPiece(newValue);
-            }
-          }) ; */
-
-          return this;
+        return this;
     }
 
-    private void createGanttTableView(){
-        //Creating columns
-        TableColumn< T, String> nameCol = new TableColumn< T, String> (name);
+    private void createGanttTableView() {
+        // Creating columns
+        TableColumn<T, String> nameCol = new TableColumn<T, String>(name);
         nameCol.setCellValueFactory(new PropertyValueFactory<T, String>("name"));
 
-        TableColumn< T, LocalDate>  startCol = new TableColumn< T, LocalDate>(start);
+        TableColumn<T, LocalDate> startCol = new TableColumn<T, LocalDate>(start);
         startCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
 
-        TableColumn< T, LocalDate> endCol = new TableColumn< T, LocalDate>(end);
-        endCol.setCellValueFactory(new PropertyValueFactory< T, LocalDate>("endDate"));
+        TableColumn<T, LocalDate> endCol = new TableColumn<T, LocalDate>(end);
+        endCol.setCellValueFactory(new PropertyValueFactory<T, LocalDate>("endDate"));
 
-        TableColumn< T, Integer> durationCol = new TableColumn< T, Integer>(duration);
-        durationCol.setCellValueFactory(new PropertyValueFactory< T, Integer>("duration"));
+        TableColumn<T, Integer> durationCol = new TableColumn<T, Integer>(duration);
+        durationCol.setCellValueFactory(new PropertyValueFactory<T, Integer>("duration"));
 
+        TableColumn<T, model.State> stateCol = new TableColumn<T, State>(state);
+        stateCol.setCellValueFactory(new PropertyValueFactory<T, State>("state"));
 
-        TableColumn< T, model.State> stateCol = new TableColumn< T, State>(state);
-        stateCol.setCellValueFactory(new PropertyValueFactory< T, State>("state")); 
-
-        TableColumn< T, Double> workCompleteCol = new TableColumn<T, Double> (complete);
+        TableColumn<T, Double> workCompleteCol = new TableColumn<T, Double>(complete);
         workCompleteCol.setCellValueFactory(new PropertyValueFactory<T, Double>(
-        "workComplete"));
+                "workComplete"));
         workCompleteCol
-        .setCellFactory(ProgressBarTableCell.<T> forTableColumn()); 
+                .setCellFactory(ProgressBarTableCell.<T>forTableColumn());
 
-        Callback<TableColumn<T, Double>, TableCell<T, Double>> cellFactory =
-        new Callback<TableColumn<T, Double>, TableCell<T, Double>>() {
+        Callback<TableColumn<T, Double>, TableCell<T, Double>> cellFactory = new Callback<TableColumn<T, Double>, TableCell<T, Double>>() {
             public TableCell call(TableColumn<T, Double> p) {
                 return new TableCell<T, Double>() {
 
@@ -96,15 +94,15 @@ public abstract class GanttTableView<T> extends TableView<T>{
 
                     @Override
                     public void updateItem(Double item, boolean empty) {
-                        if(item != null){
+                        if (item != null) {
                             super.updateItem(item, empty);
-                        if (empty) {
-                            setText(null);
-                            setGraphic(null);
-                        } else {
-                            pb.setProgress(item);
-                            setGraphic(pb);
-                        }
+                            if (empty) {
+                                setText(null);
+                                setGraphic(null);
+                            } else {
+                                pb.setProgress(item);
+                                setGraphic(pb);
+                            }
                         }
                     }
                 };
@@ -112,10 +110,9 @@ public abstract class GanttTableView<T> extends TableView<T>{
         };
         workCompleteCol.setCellFactory(cellFactory);
 
-        TableColumn< T, String> infoCol = new TableColumn< T, String>(info);
-        infoCol.setCellValueFactory(new PropertyValueFactory< T, String>("info"));
+        TableColumn<T, String> infoCol = new TableColumn<T, String>(info);
+        infoCol.setCellValueFactory(new PropertyValueFactory<T, String>("info"));
 
-        
         this.getColumns().addAll(nameCol, startCol, endCol, durationCol, stateCol, workCompleteCol, infoCol);
 
         // add specific columns
@@ -124,39 +121,31 @@ public abstract class GanttTableView<T> extends TableView<T>{
 
     public abstract void addSpecificColumns();
 
-    private void addLegend(){
-      //legende
-      HBox lpHBox = createLegendElement(low);
-      HBox mpHBox = createLegendElement(medium);
-      HBox hpHBox = createLegendElement(high);
+    private void addLegend() {
+        // legende
+        HBox lpHBox = createLegendElement(low);
+        HBox mpHBox = createLegendElement(medium);
+        HBox hpHBox = createLegendElement(high);
 
-      legendBox.add(lpHBox,0,0);
-      legendBox.add(mpHBox,1,0);
-      legendBox.add(hpHBox,2,0);
+        legendBox.add(lpHBox, 0, 0);
+        legendBox.add(mpHBox, 1, 0);
+        legendBox.add(hpHBox, 2, 0);
     }
 
-    private HBox createLegendElement(TaskPriority priority){
+    private HBox createLegendElement(TaskPriority priority) {
         Rectangle rect = new Rectangle();
-        rect.setX(20); //setting the X coordinate of upper left //corner of rectangle   
-        rect.setY(20); //setting the Y coordinate of upper left //corner of rectangle   
-        rect.setWidth(20); //setting the width of rectangle   
-        rect.setHeight(20); 
-        rect.setFill(priority.getColor());  
-        HBox hBox = new HBox (rect, priority.getLabel());
+        rect.setX(20); // setting the X coordinate of upper left //corner of rectangle
+        rect.setY(20); // setting the Y coordinate of upper left //corner of rectangle
+        rect.setWidth(20); // setting the width of rectangle
+        rect.setHeight(20);
+        rect.setFill(priority.getColor());
+        HBox hBox = new HBox(rect, priority.getLabel());
         hBox.setSpacing(10);
         GridPane.setHgrow(hBox, Priority.ALWAYS);
         HBox.setMargin(rect, new Insets(5, 5, 5, 5));
         HBox.setMargin(priority.getLabel(), new Insets(5, 5, 5, 5));
 
         return hBox;
-    }
-
-    public BorderPane getCompleteView() {
-        return completeView;
-    }
-
-    public void setCompleteView(BorderPane completeView) {
-        this.completeView = completeView;
     }
 
     public GridPane getLegendBox() {
@@ -247,7 +236,12 @@ public abstract class GanttTableView<T> extends TableView<T>{
         this.info = info;
     }
 
+    public BorderPane getTableWithLegendView() {
+        return tableWithLegendView;
+    }
+
+    public void setTableWithLegendView(BorderPane tableWithLegendView) {
+        this.tableWithLegendView = tableWithLegendView;
+    }
 
 }
-    
-

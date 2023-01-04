@@ -9,22 +9,22 @@ import javafx.beans.property.StringProperty;
 
 public class GanttResource extends GanttData {
 
-    private SimpleStringProperty role;
-    private SimpleObjectProperty type;
-   
-    public GanttResource() {
-        super();
-    }
+	private SimpleStringProperty role;
+	private SimpleObjectProperty<ResourceType> type;
 
-    public GanttResource(String name, LocalDate startDate, LocalDate endDate) {
-        super(name, startDate, endDate);
-    }
+	public GanttResource() {
+		super();
+	}
 
-    public GanttResource(String name, LocalDate startDate, LocalDate endDate, String info, String role) {
-        super(name, startDate, endDate, info);
-        this.role = new SimpleStringProperty(role);
-    }
-    
+	public GanttResource(String name, LocalDate startDate, LocalDate endDate) {
+		super(name, startDate, endDate);
+	}
+
+	public GanttResource(String name, LocalDate startDate, LocalDate endDate, String info, String role) {
+		super(name, startDate, endDate, info);
+		this.role = new SimpleStringProperty(role);
+	}
+
 	public StringProperty roleProperty() {
 		return this.role;
 	}
@@ -33,7 +33,7 @@ public class GanttResource extends GanttData {
 		return this.roleProperty().get();
 	}
 
-	public void setRole( String role) {
+	public void setRole(String role) {
 		this.roleProperty().set(role);
 	}
 
@@ -45,8 +45,8 @@ public class GanttResource extends GanttData {
 		return this.typeProperty().get();
 	}
 
-	public void setType( ResourceType type) {
+	public void setType(ResourceType type) {
 		this.typeProperty().set(type);
 	}
-    
+
 }

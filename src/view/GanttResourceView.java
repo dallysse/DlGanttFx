@@ -3,12 +3,12 @@ package view;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.GanttResource;
+
 public class GanttResourceView extends GanttTableView<GanttResource> {
-    
-    private String role = "Role";  
 
+    private String role = "Role";
 
-    public GanttResourceView(){
+    public GanttResourceView() {
         super();
         this.name = "Resource Name";
         this.start = " Start";
@@ -19,11 +19,11 @@ public class GanttResourceView extends GanttTableView<GanttResource> {
     }
 
     @Override
-    public void addSpecificColumns(){
-        //Creating columns
-        TableColumn< GanttResource, String> roleCol = new TableColumn< GanttResource, String> (role);
+    public void addSpecificColumns() {
+        // Creating columns
+        TableColumn<GanttResource, String> roleCol = new TableColumn<GanttResource, String>(role);
         roleCol.setCellValueFactory(new PropertyValueFactory<GanttResource, String>("role"));
-        
+
         this.getColumns().addAll(roleCol);
     }
 
@@ -35,5 +35,4 @@ public class GanttResourceView extends GanttTableView<GanttResource> {
         this.role = role;
     }
 
-    
 }

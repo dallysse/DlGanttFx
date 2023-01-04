@@ -10,11 +10,11 @@ import model.GanttResource;
 
 public class ResourceChart  {
 
-    private BorderPane graphicView;
-    private SplitPane viewGantt;
+    private SplitPane ResourceChart;
+    private  BorderPane ResourceChartWithMenu;
     private GanttTableView ganttTableView;
     private TimelineWithGraphicView timelineWithGraphicView; 
-    private GanttMenu menu;
+    private GanttMenuView menu;
  
     public ResourceChart(){
 
@@ -25,12 +25,14 @@ public class ResourceChart  {
         timelineWithGraphicView = new TimelineResourceWithGraphicView().init(13, true);
         timelineWithGraphicView.setGanttPiece(resources);
 
-        graphicView=new BorderPane();
-        menu = new GanttMenu().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView);
-        graphicView.setTop(menu);  
-        graphicView.setCenter(timelineWithGraphicView);     
 
-        viewGantt = new SplitPane(ganttTableView.getCompleteView(), graphicView);
+        menu = new GanttMenuView().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView);
+
+        ResourceChart = new SplitPane(ganttTableView, timelineWithGraphicView);
+
+        ResourceChartWithMenu=new BorderPane();
+        ResourceChartWithMenu.setTop(menu);  
+        ResourceChartWithMenu.setCenter(ResourceChart);   
     }
 
     private ObservableList<GanttResource> addGanttResources() {
@@ -44,21 +46,21 @@ public class ResourceChart  {
         return resources;
     }
 
-    public BorderPane getGraphicView() {
-        return graphicView;
+    public SplitPane getResourceChart() {
+        return ResourceChart;
+    }
+
+    public void setResourceChart(SplitPane resourceChart) {
+        ResourceChart = resourceChart;
+    }
+
+    public BorderPane getResourceChartWithMenu() {
+        return ResourceChartWithMenu;
+    }
+
+    public void setResourceChartWithMenu(BorderPane resourceChartWithMenu) {
+        ResourceChartWithMenu = resourceChartWithMenu;
     }
 
 
-    public void setGraphicView(BorderPane view) {
-        this.graphicView = view;
-    }
-
-    public SplitPane getViewGantt() {
-        return viewGantt;
-    }
-
-
-    public void setViewGantt(SplitPane viewG) {
-        this.viewGantt = viewGantt;
-    }
 }

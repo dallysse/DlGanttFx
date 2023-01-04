@@ -8,59 +8,61 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
 import model.GanttTask;
 
-public class GanttChart  {
-    private BorderPane graphicView;
-    private SplitPane viewGantt;
-    private TimelineView timelineView;
-    private GanttTableView ganttTableView;
-    private TimelineWithGraphicView timelineWithGraphicView; 
-    private GanttMenu menu;
- 
-    public GanttChart(){
- 
+public class GanttChart {
+    private BorderPane ganttChartWithMenu;
+    private SplitPane ganttChart;
+    private GanttTableView ganttTaskView;
+    private TimelineWithGraphicView timelineWithGraphicView;
+    private GanttMenuView menu;
+
+    public GanttChart() {
+
         ObservableList<GanttTask> ganttTasks = addGanttTasks();
-        ganttTableView = new GanttTaskView().generate();
-        ganttTableView.setItems(ganttTasks);
+        ganttTaskView = new GanttTaskView().generate();
+        ganttTaskView.setItems(ganttTasks);
 
         timelineWithGraphicView = new TimelineTaskWithGraphicView().init(13, true);
         timelineWithGraphicView.setGanttPiece(ganttTasks);
 
-        graphicView=new BorderPane();
-        menu = new GanttMenu().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView);
-        graphicView.setTop(menu);  
-        graphicView.setCenter(timelineWithGraphicView);     
+        menu = new GanttMenuView().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(),
+                timelineWithGraphicView);
 
-        viewGantt = new SplitPane(ganttTableView.getCompleteView(), graphicView);
+        ganttChart = new SplitPane(ganttTaskView.getTableWithLegendView(), timelineWithGraphicView);
+
+        ganttChartWithMenu = new BorderPane();
+        ganttChartWithMenu.setTop(menu);
+        ganttChartWithMenu.setCenter(ganttChart);
     }
 
     private ObservableList<GanttTask> addGanttTasks() {
-         ObservableList<GanttTask> ganttTasks = FXCollections
-        .<GanttTask> observableArrayList();
-            GanttTask ganttTask1 = new GanttTask("Erstellung des Mockups", LocalDate.of(2023, 01, 17), LocalDate.of(2023, 01, 26), 1, true,  " Mockup erstellen");
-            GanttTask ganttTask2 =new GanttTask("Aufbau der Architektur", LocalDate.of(2023, 01, 01), LocalDate.of(2023, 01, 15), 2, false, "Arbeit struktirieren");
-            GanttTask ganttTask3 =new GanttTask("Erstellung der Datenmodel", LocalDate.of(2023, 04, 26), LocalDate.of(2023, 05, 30), 3, true, "Daten Bank erstellen");
-            GanttTask ganttTask4 =new GanttTask("Implementierung eines Prototyps", LocalDate.of(2023, 12, 27), LocalDate.of(2024, 02, 7), 3, false, "Prototyp implementieren");    
+        ObservableList<GanttTask> ganttTasks = FXCollections
+                .<GanttTask>observableArrayList();
+        GanttTask ganttTask1 = new GanttTask("Erstellung des Mockups", LocalDate.of(2023, 01, 17),
+                LocalDate.of(2023, 01, 26), 1, true, " Mockup erstellen");
+        GanttTask ganttTask2 = new GanttTask("Aufbau der Architektur", LocalDate.of(2023, 01, 01),
+                LocalDate.of(2023, 01, 15), 2, false, "Arbeit struktirieren");
+        GanttTask ganttTask3 = new GanttTask("Erstellung der Datenmodel", LocalDate.of(2023, 04, 26),
+                LocalDate.of(2023, 05, 30), 3, true, "Daten Bank erstellen");
+        GanttTask ganttTask4 = new GanttTask("Implementierung eines Prototyps", LocalDate.of(2023, 12, 27),
+                LocalDate.of(2024, 02, 7), 3, false, "Prototyp implementieren");
         ganttTasks.addAll(ganttTask1, ganttTask2, ganttTask3, ganttTask4);
         return ganttTasks;
     }
 
-    public BorderPane getGraphicView() {
-        return graphicView;
+    public BorderPane getGanttChartWithMenu() {
+        return ganttChartWithMenu;
     }
 
-
-    public void setGraphicView(BorderPane view) {
-        this.graphicView = view;
+    public void setGanttChartWithMenu(BorderPane ganttChartWithMenu) {
+        this.ganttChartWithMenu = ganttChartWithMenu;
     }
 
-    public SplitPane getViewGantt() {
-        return viewGantt;
+    public SplitPane getGanttChart() {
+        return ganttChart;
     }
 
-
-    public void setViewGantt(SplitPane viewG) {
-        this.viewGantt = viewGantt;
+    public void setGanttChart(SplitPane ganttChart) {
+        this.ganttChart = ganttChart;
     }
 
- 
 }
