@@ -18,11 +18,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import model.TaskPriority;
-import model.State;
+import model.TaskState;
 
 public abstract class GanttTableView<T> extends TableView<T> {
 
-    private BorderPane tableWithLegendView;
+    private BorderPane tableWithPriorityLegendView;
     protected GridPane legendBox = new GridPane();
     protected TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED);
     protected TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE);
@@ -42,24 +42,10 @@ public abstract class GanttTableView<T> extends TableView<T> {
 
     public GanttTableView<T> generate() {
         createGanttTableView();
-        tableWithLegendView = new BorderPane();
-        tableWithLegendView.setCenter(this);
-        tableWithLegendView.setBottom(legendBox);
-        addLegend();
-        /*
-         * graphicView = new TimelineWithGraphicView();
-         * 
-         * this.getSelectionModel()
-         * .selectedItemProperty()
-         * .addListener(
-         * (ObservableValue<? extends T> observable, T oldValue,
-         * T newValue) -> {
-         * if (observable != null && observable.getValue() != null) {
-         * graphicView.setGanttPiece(newValue);
-         * }
-         * }) ;
-         */
-
+        tableWithPriorityLegendView = new BorderPane();
+        tableWithPriorityLegendView.setCenter(this);
+        tableWithPriorityLegendView.setBottom(legendBox);
+        addPriorityLegend();
         return this;
     }
 
@@ -77,8 +63,8 @@ public abstract class GanttTableView<T> extends TableView<T> {
         TableColumn<T, Integer> durationCol = new TableColumn<T, Integer>(duration);
         durationCol.setCellValueFactory(new PropertyValueFactory<T, Integer>("duration"));
 
-        TableColumn<T, model.State> stateCol = new TableColumn<T, State>(state);
-        stateCol.setCellValueFactory(new PropertyValueFactory<T, State>("state"));
+        TableColumn<T, model.TaskState> stateCol = new TableColumn<T, TaskState>(state);
+        stateCol.setCellValueFactory(new PropertyValueFactory<T, TaskState>("state"));
 
         TableColumn<T, Double> workCompleteCol = new TableColumn<T, Double>(complete);
         workCompleteCol.setCellValueFactory(new PropertyValueFactory<T, Double>(
@@ -121,7 +107,7 @@ public abstract class GanttTableView<T> extends TableView<T> {
 
     public abstract void addSpecificColumns();
 
-    private void addLegend() {
+    private void addPriorityLegend() {
         // legende
         HBox lpHBox = createLegendElement(low);
         HBox mpHBox = createLegendElement(medium);
@@ -236,12 +222,12 @@ public abstract class GanttTableView<T> extends TableView<T> {
         this.info = info;
     }
 
-    public BorderPane getTableWithLegendView() {
-        return tableWithLegendView;
+    public BorderPane getTableWithPriorityLegendView() {
+        return tableWithPriorityLegendView;
     }
 
-    public void setTableWithLegendView(BorderPane tableWithLegendView) {
-        this.tableWithLegendView = tableWithLegendView;
+    public void setTableWithPriorityLegendView(BorderPane tableWithPriorityLegendView) {
+        this.tableWithPriorityLegendView = tableWithPriorityLegendView;
     }
 
 }

@@ -21,7 +21,7 @@ public class GanttData {
 	protected StringProperty info;
 	protected DoubleProperty workComplete;
 	protected IntegerProperty duration;
-	protected State state;
+	protected TaskState state;
 
 	public GanttData() {
 	}
@@ -42,8 +42,8 @@ public class GanttData {
 							/ totalWorkingDays);
 		}
 
-		this.state = (workComplete == null || workComplete.get() == 0.0) ? State.HALTED
-				: ((workComplete.get() == 1.0) ? State.TERMINATED : State.RUNNING);
+		this.state = (workComplete == null || workComplete.get() == 0.0) ? TaskState.HALTED
+				: ((workComplete.get() == 1.0) ? TaskState.TERMINATED : TaskState.RUNNING);
 	}
 
 	public GanttData(String name, LocalDate startDate, LocalDate endDate, String info) {
@@ -61,8 +61,8 @@ public class GanttData {
 					(double) (Duration.between(startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1)
 							/ totalWorkingDays);
 		}
-		this.state = (workComplete == null || workComplete.get() == 0.0) ? State.HALTED
-				: ((workComplete.get() == 1.0) ? State.TERMINATED : State.RUNNING);
+		this.state = (workComplete == null || workComplete.get() == 0.0) ? TaskState.HALTED
+				: ((workComplete.get() == 1.0) ? TaskState.TERMINATED : TaskState.RUNNING);
 		this.info = new SimpleStringProperty(info);
 	}
 
@@ -126,11 +126,11 @@ public class GanttData {
 		this.workCompleteProperty().set(workComplete);
 	}
 
-	public State getState() {
+	public TaskState getState() {
 		return state;
 	}
 
-	public void setState(State state) {
+	public void setState(TaskState state) {
 		this.state = state;
 	}
 

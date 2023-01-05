@@ -3,7 +3,7 @@ package Widgets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 
-public class GanttBarPiece extends Pane {
+public class GanttBar extends Pane {
 
 	public enum PieceType {
 		BEGINNING,
@@ -15,11 +15,11 @@ public class GanttBarPiece extends Pane {
 	private PieceType type;
 	private String name;
 
-	public GanttBarPiece(PieceType type) {
+	public GanttBar(PieceType type) {
 		this(type, null);
 	}
 
-	public GanttBarPiece(PieceType type, String name) {
+	public GanttBar(PieceType type, String name) {
 		this.type = type;
 		this.name = name;
 

@@ -3,7 +3,7 @@ package model;
 /**
  * Activities or Resources State
  */
-public enum State {
+public enum TaskState {
     RUNNING,
     HALTED,
     TERMINATED

@@ -27,7 +27,7 @@ public class GanttChart {
         menu = new GanttMenuView().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(),
                 timelineWithGraphicView);
 
-        ganttChart = new SplitPane(ganttTaskView.getTableWithLegendView(), timelineWithGraphicView);
+        ganttChart = new SplitPane(ganttTaskView.getTableWithPriorityLegendView(), timelineWithGraphicView);
 
         ganttChartWithMenu = new BorderPane();
         ganttChartWithMenu.setTop(menu);
@@ -45,6 +45,8 @@ public class GanttChart {
                 LocalDate.of(2023, 05, 30), 3, true, "Daten Bank erstellen");
         GanttTask ganttTask4 = new GanttTask("Implementierung eines Prototyps", LocalDate.of(2023, 12, 27),
                 LocalDate.of(2024, 02, 7), 3, false, "Prototyp implementieren");
+        GanttTask ganttTask5 = new GanttTask("Test superposition", LocalDate.of(2023, 01, 10),
+                        LocalDate.of(2023, 01, 25), 2, false, "Arbeit struktirieren");
         ganttTasks.addAll(ganttTask1, ganttTask2, ganttTask3, ganttTask4);
         return ganttTasks;
     }

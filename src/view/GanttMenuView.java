@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import Widgets.GanttBarPiece;
+import Widgets.GanttBar;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
@@ -146,7 +146,7 @@ public class GanttMenuView extends HBox {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                TableColumn<GanttTask, GanttBarPiece> column = tableView.findDayColumn(date, chooseFirstDayOfWeek);
+                TableColumn<GanttTask, GanttBar> column = tableView.findDayColumn(date, chooseFirstDayOfWeek);
 
                 if (column != null) {
                     scrollAndSelect(column, tableView);
@@ -163,7 +163,7 @@ public class GanttMenuView extends HBox {
      * 
      * @param date
      */
-    private void scrollAndSelect(TableColumn<GanttTask, GanttBarPiece> column, TimelineWithGraphicView tableView) {
+    private void scrollAndSelect(TableColumn<GanttTask, GanttBar> column, TimelineWithGraphicView tableView) {
         tableView.scrollToColumn(column);
     }
 
