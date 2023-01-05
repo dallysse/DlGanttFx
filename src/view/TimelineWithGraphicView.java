@@ -34,6 +34,8 @@ public abstract class TimelineWithGraphicView<T extends GanttData> extends Table
     private final static String styleFormat = "-fx-background-color: %s";
 
     private String weekendColor = "lightblue";
+    private String todayColor = "lightcoral";
+
     TableColumn<T, GanttBar> weekSubcolumn ;
 
     private YearMonth currentYearMonth;
@@ -80,6 +82,8 @@ public abstract class TimelineWithGraphicView<T extends GanttData> extends Table
         for (LocalDate date = firstDay; !date.isAfter(lastDay); date = date.plusDays(1)) {
             // get current week
             // int currentYear=date.getYear();
+            LocalDate today = LocalDate.now();
+
             int currentWeeknumber = date.get(weekFields.weekOfWeekBasedYear());
 
             if (currentWeeknumber != weekNumber) {
@@ -96,13 +100,15 @@ public abstract class TimelineWithGraphicView<T extends GanttData> extends Table
 
             weekSubcolumn = new TableColumn<T, GanttBar>(date.format(dayFormatter));
 
-            if (DateUtils.isWeekend(date)) {
+            if (DateUtils.isWeekend(date)){
 
-                // weekSubcolumn.setStyle(String.format(styleFormat, weekendColor));
+                //weekSubcolumn.setStyle(String.format(styleFormat, weekendColor));
                 weekSubcolumn.getStyleClass().add("WeekendColor");
-
             }
 
+            if (date.equals(today)){
+                weekSubcolumn.setStyle(String.format(styleFormat, todayColor));
+            }
             // create week subcolumns
             weekColumn.getColumns().add(weekSubcolumn);
         }

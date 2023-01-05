@@ -18,8 +18,8 @@ public class App extends Application {
 		ResourceChart resourceChart = new ResourceChart();
 
 		try {
-			//Scene scene = new Scene(resourceChart.getResourceChartWithMenu());
-			Scene scene = new Scene(ganttChart.getGanttChartWithMenu());
+			Scene scene = new Scene(resourceChart.getResourceChartWithMenu());
+			//Scene scene = new Scene(ganttChart.getGanttChartWithMenu());
 			scene.getStylesheets().add(getClass().getResource("/css/gantt.css").toExternalForm());
 			primaryStage.setTitle("Ganttchart");
 			primaryStage.setScene(scene);
