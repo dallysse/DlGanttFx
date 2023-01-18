@@ -1,8 +1,8 @@
 
+import controls.GanttChart;
+import controls.ResourceChart;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import view.GanttChart;
-import view.ResourceChart;
 import javafx.scene.Scene;
 
 public class App extends Application {

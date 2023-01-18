@@ -1,27 +1,35 @@
 
-
 .timeline .table-view .column-header-background .label{
     -fx-background-color: transparent;
     -fx-text-fill: black;
     -fx-text-weight:strong;
-    -fx-border-style:solid inside;
-
  } 
-
- .timeline .table-row-cell {
-    -fx-cell-size: 30px;
-}
 
 .timeline .table-row-cell {
     -fx-background-color: white;
 }
 
-.list-row-cell {
-    -fx-background-color: white;
+.timeline .table-column {
+	-fx-padding: 5 0 3 0;
+	-fx-border-width: 0px;
+
 }
 
-.timeline .table-row-cell:selected {
-    -fx-background-color: rgb(184, 192, 226);
+.timeline .table-view:focused .table-row-cell:selected {
+    -fx-background-color: derive(-fx-base, 20%);
+    -fx-background-insets: 0 0 0 0;
+}
+
+.WeekendColor.column-header  {
+    -fx-background-color: green;
+}
+
+.today.table-column {
+	-fx-padding: 5 0 3 0;
+	-fx-margin: 0 0 0 0;
+	-fx-border-width: 0px 3px 0px 0px;
+	-fx-border-color: green;
+
 }
 
 .label {
@@ -29,47 +37,30 @@
 }
 
  .gantt-piece-beginning {	
-	-fx-background-color: #468aff, #c572e9, #468aff, #c572e9;
+	-fx-background-color: #5bb336, #54cc82, #70ca4a, #54cc82;
 	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 2, 3 0 4 3;
 	-fx-border-width: 0;
 	-fx-background-radius: 5 0 0 5;
 }
 
 .gantt-piece-center {
-	-fx-background-color: #468aff, #c572e9, #468aff, #c572e9;
+	-fx-background-color: #61b83c, #54cc82, #6ad83b, #54cc82;
 	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 0, 3 0 4 0;
 	-fx-border-width: 0;
 }
 
 .gantt-piece-end {
-	-fx-background-color: #468aff, #c572e9, #468aff, #c572e9;
+	-fx-background-color: #5bb336, #54cc82, #60c833, #54cc82;
 	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
 	-fx-border-width: 0;
 	-fx-background-radius: 0 5 5 0;
 }
 
 .gantt-piece-complet {
-	-fx-background-color: #468aff, #c572e9, #468aff, #c572e9;
+	-fx-background-color: #6fdc41, #54cc82, #75dc48, #54cc82;
 	-fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
 	-fx-border-width: 0;
 	-fx-background-radius: 5 5 5 5;
-}
-
-.timeline {
-	-fx-table-cell-border-color: transparent;
-	-fx-table-cell-border-width: 0px;
-    -fx-background-color: #f7f5f2;
-
-}
-
-.timeline .table-column {
-	-fx-padding: 5 0 3 0;
-	-fx-border-width: 0px;
-}
-
-
-.WeekendColor.column-header  {
-    -fx-background-color: #a8d5ef;
 }
 
 .table-row-cell:empty {
@@ -83,7 +74,7 @@
 }
 .table-row-cell:filled:selected .table-cell {
 	-fx-text-fill: black;
-    -fx-background-color: rgb(132, 152, 243);
+    -fx-background-color: rgb(67, 158, 96);
 
 }
 .table-view .cell:filled{

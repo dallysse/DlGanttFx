@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class GanttResource extends Object {
+public class GanttResource extends GanttDataModel {
 
 	private SimpleStringProperty role;
 	private SimpleObjectProperty<ResourceType> type;
