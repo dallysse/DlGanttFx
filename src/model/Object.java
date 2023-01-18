@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class GanttData {
+public class Object {
 
 	protected IntegerProperty id;
 	protected StringProperty name;
@@ -21,12 +21,12 @@ public class GanttData {
 	protected StringProperty info;
 	protected DoubleProperty workComplete;
 	protected IntegerProperty duration;
-	protected TaskState state;
+	protected ObjectState state;
 
-	public GanttData() {
+	public Object() {
 	}
 
-	public GanttData(String name, LocalDate startDate, LocalDate endDate) {
+	public Object(String name, LocalDate startDate, LocalDate endDate) {
 		this.name = new SimpleStringProperty(name);
 		this.startDate = new SimpleObjectProperty<>(startDate);
 		this.endDate = new SimpleObjectProperty<>(endDate);
@@ -42,11 +42,11 @@ public class GanttData {
 							/ totalWorkingDays);
 		}
 
-		this.state = (workComplete == null || workComplete.get() == 0.0) ? TaskState.HALTED
-				: ((workComplete.get() == 1.0) ? TaskState.TERMINATED : TaskState.RUNNING);
+		this.state = (workComplete == null || workComplete.get() == 0.0) ? ObjectState.HALTED
+				: ((workComplete.get() == 1.0) ? ObjectState.TERMINATED : ObjectState.RUNNING);
 	}
 
-	public GanttData(String name, LocalDate startDate, LocalDate endDate, String info) {
+	public Object(String name, LocalDate startDate, LocalDate endDate, String info) {
 		this.name = new SimpleStringProperty(name);
 		this.startDate = new SimpleObjectProperty<>(startDate);
 		this.endDate = new SimpleObjectProperty<>(endDate);
@@ -61,8 +61,8 @@ public class GanttData {
 					(double) (Duration.between(startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1)
 							/ totalWorkingDays);
 		}
-		this.state = (workComplete == null || workComplete.get() == 0.0) ? TaskState.HALTED
-				: ((workComplete.get() == 1.0) ? TaskState.TERMINATED : TaskState.RUNNING);
+		this.state = (workComplete == null || workComplete.get() == 0.0) ? ObjectState.HALTED
+				: ((workComplete.get() == 1.0) ? ObjectState.TERMINATED : ObjectState.RUNNING);
 		this.info = new SimpleStringProperty(info);
 	}
 
@@ -126,11 +126,11 @@ public class GanttData {
 		this.workCompleteProperty().set(workComplete);
 	}
 
-	public TaskState getState() {
+	public ObjectState getState() {
 		return state;
 	}
 
-	public void setState(TaskState state) {
+	public void setState(ObjectState state) {
 		this.state = state;
 	}
 

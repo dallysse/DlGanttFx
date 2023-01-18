@@ -1,13 +1,24 @@
 package view;
 
+import javafx.geometry.Insets;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import model.GanttTask;
+import model.TaskPriority;
 
 public class GanttTaskView extends GanttTableView<GanttTask> {
+    private GridPane legendBox = new GridPane();
+    private TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED);
+    private TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE);
+    private TaskPriority low = new TaskPriority(new Label("Low Priority"), Color.PALEGREEN);
 
     private String priority = "Task Priority";
     private String isCritical = "IsCritical";
@@ -20,6 +31,12 @@ public class GanttTaskView extends GanttTableView<GanttTask> {
         this.duration = "Task Duration";
         this.state = "Task State";
         this.info = "Task Infos";
+    }
+
+    @Override
+    public void init() {
+        tableWithPriorityLegendView.setBottom(legendBox);
+        addPriorityLegend();
     }
 
     @Override
@@ -69,7 +86,62 @@ public class GanttTaskView extends GanttTableView<GanttTask> {
 
         this.getColumns().addAll(priorityCol, isCriticalCol);
     }
+    private void addPriorityLegend() {
+        // legende
+        HBox lpHBox = createLegendElement(low);
+        HBox mpHBox = createLegendElement(medium);
+        HBox hpHBox = createLegendElement(high);
 
+        legendBox.add(lpHBox, 0, 0);
+        legendBox.add(mpHBox, 1, 0);
+        legendBox.add(hpHBox, 2, 0);
+    }
+
+    private HBox createLegendElement(TaskPriority priority) {
+        Rectangle rect = new Rectangle();
+        rect.setX(20); // setting the X coordinate of upper left //corner of rectangle
+        rect.setY(20); // setting the Y coordinate of upper left //corner of rectangle
+        rect.setWidth(20); // setting the width of rectangle
+        rect.setHeight(20);
+        rect.setFill(priority.getColor());
+        HBox hBox = new HBox(rect, priority.getLabel());
+        hBox.setSpacing(10);
+        GridPane.setHgrow(hBox, Priority.ALWAYS);
+        HBox.setMargin(rect, new Insets(5, 5, 5, 5));
+        HBox.setMargin(priority.getLabel(), new Insets(5, 5, 5, 5));
+
+        return hBox;
+    }
+    public TaskPriority getHigh() {
+        return high;
+    }
+
+    public void setHigh(TaskPriority high) {
+        this.high = high;
+    }
+
+    public TaskPriority getMedium() {
+        return medium;
+    }
+
+    public void setMedium(TaskPriority medium) {
+        this.medium = medium;
+    }
+
+    public TaskPriority getLow() {
+        return low;
+    }
+
+    public void setLow(TaskPriority low) {
+        this.low = low;
+    }
+    public GridPane getLegendBox() {
+        return legendBox;
+    }
+
+    public void setLegendBox(GridPane legendBox) {
+        this.legendBox = legendBox;
+    }
     public String getPriority() {
         return priority;
     }

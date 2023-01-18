@@ -18,15 +18,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import model.TaskPriority;
-import model.TaskState;
+import model.ObjectState;
 
 public abstract class GanttTableView<T> extends TableView<T> {
 
-    private BorderPane tableWithPriorityLegendView;
-    protected GridPane legendBox = new GridPane();
-    protected TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED);
-    protected TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE);
-    protected TaskPriority low = new TaskPriority(new Label("Low Priority"), Color.PALEGREEN);
+    protected BorderPane tableWithPriorityLegendView;
 
     protected String name = "Name";
     protected String start = "Start";
@@ -41,13 +37,14 @@ public abstract class GanttTableView<T> extends TableView<T> {
     }
 
     public GanttTableView<T> generate() {
-        createGanttTableView();
         tableWithPriorityLegendView = new BorderPane();
         tableWithPriorityLegendView.setCenter(this);
-        tableWithPriorityLegendView.setBottom(legendBox);
-        addPriorityLegend();
+        createGanttTableView();
+        init();
         return this;
     }
+
+    public abstract void init();
 
     private void createGanttTableView() {
         // Creating columns
@@ -63,8 +60,8 @@ public abstract class GanttTableView<T> extends TableView<T> {
         TableColumn<T, Integer> durationCol = new TableColumn<T, Integer>(duration);
         durationCol.setCellValueFactory(new PropertyValueFactory<T, Integer>("duration"));
 
-        TableColumn<T, model.TaskState> stateCol = new TableColumn<T, TaskState>(state);
-        stateCol.setCellValueFactory(new PropertyValueFactory<T, TaskState>("state"));
+        TableColumn<T, model.ObjectState> stateCol = new TableColumn<T, ObjectState>(state);
+        stateCol.setCellValueFactory(new PropertyValueFactory<T, ObjectState>("state"));
 
         TableColumn<T, Double> workCompleteCol = new TableColumn<T, Double>(complete);
         workCompleteCol.setCellValueFactory(new PropertyValueFactory<T, Double>(
@@ -106,65 +103,6 @@ public abstract class GanttTableView<T> extends TableView<T> {
     }
 
     public abstract void addSpecificColumns();
-
-    private void addPriorityLegend() {
-        // legende
-        HBox lpHBox = createLegendElement(low);
-        HBox mpHBox = createLegendElement(medium);
-        HBox hpHBox = createLegendElement(high);
-
-        legendBox.add(lpHBox, 0, 0);
-        legendBox.add(mpHBox, 1, 0);
-        legendBox.add(hpHBox, 2, 0);
-    }
-
-    private HBox createLegendElement(TaskPriority priority) {
-        Rectangle rect = new Rectangle();
-        rect.setX(20); // setting the X coordinate of upper left //corner of rectangle
-        rect.setY(20); // setting the Y coordinate of upper left //corner of rectangle
-        rect.setWidth(20); // setting the width of rectangle
-        rect.setHeight(20);
-        rect.setFill(priority.getColor());
-        HBox hBox = new HBox(rect, priority.getLabel());
-        hBox.setSpacing(10);
-        GridPane.setHgrow(hBox, Priority.ALWAYS);
-        HBox.setMargin(rect, new Insets(5, 5, 5, 5));
-        HBox.setMargin(priority.getLabel(), new Insets(5, 5, 5, 5));
-
-        return hBox;
-    }
-
-    public GridPane getLegendBox() {
-        return legendBox;
-    }
-
-    public void setLegendBox(GridPane legendBox) {
-        this.legendBox = legendBox;
-    }
-
-    public TaskPriority getHigh() {
-        return high;
-    }
-
-    public void setHigh(TaskPriority high) {
-        this.high = high;
-    }
-
-    public TaskPriority getMedium() {
-        return medium;
-    }
-
-    public void setMedium(TaskPriority medium) {
-        this.medium = medium;
-    }
-
-    public TaskPriority getLow() {
-        return low;
-    }
-
-    public void setLow(TaskPriority low) {
-        this.low = low;
-    }
 
     public String getName() {
         return name;

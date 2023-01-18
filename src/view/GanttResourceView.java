@@ -19,6 +19,10 @@ public class GanttResourceView extends GanttTableView<GanttResource> {
     }
 
     @Override
+    public void init() {
+    }
+
+    @Override
     public void addSpecificColumns() {
         // Creating columns
         TableColumn<GanttResource, String> roleCol = new TableColumn<GanttResource, String>(role);

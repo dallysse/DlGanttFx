@@ -7,7 +7,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class GanttTask extends GanttData {
+public class GanttTask extends Object {
 
 	private SimpleIntegerProperty priority;
 	private BooleanProperty isCritical;

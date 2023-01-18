@@ -23,9 +23,9 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.util.Callback;
-import model.GanttData;
+import model.Object;
 
-public abstract class TimelineWithGraphicView<T extends GanttData> extends TableView<T> {
+public abstract class TimelineWithGraphicView<T extends Object> extends TableView<T> {
 
     // formats
     private DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\n dd ");
@@ -64,7 +64,7 @@ public abstract class TimelineWithGraphicView<T extends GanttData> extends Table
     public TimelineWithGraphicView<T> generate(LocalDate firstDay, LocalDate lastDay) {
         // get list of days
         setListOfDay(firstDay, lastDay);
-         getItems().add((T) new GanttData());
+         getItems().add((T) new Object());
         return this;
     }
 
