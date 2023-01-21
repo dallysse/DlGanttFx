@@ -2,8 +2,6 @@ package controls;
 
 import java.time.LocalDate;
 
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -11,18 +9,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
-import model.TaskPriority;
+import model.GanttDataModel;
 import model.GanttDataModelState;
 
-public abstract class GanttTableView<T> extends TableView<T> {
+public abstract class GanttTableControl<T extends GanttDataModel> extends TableView<T> {
 
-    protected BorderPane tableWithPriorityLegendView;
+    protected BorderPane tableWithPriorityLegendControl;
 
     protected String name = "Name";
     protected String start = "Start";
@@ -32,13 +25,13 @@ public abstract class GanttTableView<T> extends TableView<T> {
     protected String progress = "Progress";
     protected String description = "description";
 
-    public GanttTableView() {
+    public GanttTableControl() {
 
     }
 
-    public GanttTableView<T> generate() {
-        tableWithPriorityLegendView = new BorderPane();
-        tableWithPriorityLegendView.setCenter(this);
+    public GanttTableControl<T> generate() {
+        tableWithPriorityLegendControl = new BorderPane();
+        tableWithPriorityLegendControl.setCenter(this);
         createGanttTableView();
         init();
         return this;
@@ -69,7 +62,7 @@ public abstract class GanttTableView<T> extends TableView<T> {
         progressCol
                 .setCellFactory(ProgressBarTableCell.<T>forTableColumn());
         Callback<TableColumn<T, Double>, TableCell<T, Double>> cellFactory = new Callback<TableColumn<T, Double>, TableCell<T, Double>>() {
-            public TableCell call(TableColumn<T, Double> p) {
+            public TableCell<T, Double> call(TableColumn<T, Double> p) {
                 return new TableCell<T, Double>() {
 
                     private ProgressBar pb = new ProgressBar();
@@ -160,12 +153,12 @@ public abstract class GanttTableView<T> extends TableView<T> {
         this.description = description;
     }
 
-    public BorderPane getTableWithPriorityLegendView() {
-        return tableWithPriorityLegendView;
+    public BorderPane getTableWithPriorityLegendControl() {
+        return tableWithPriorityLegendControl;
     }
 
-    public void setTableWithPriorityLegendView(BorderPane tableWithPriorityLegendView) {
-        this.tableWithPriorityLegendView = tableWithPriorityLegendView;
+    public void setTableWithPriorityLegendControl(BorderPane tableWithPriorityLegendView) {
+        this.tableWithPriorityLegendControl = tableWithPriorityLegendView;
     }
 
 }

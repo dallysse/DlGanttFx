@@ -18,9 +18,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import model.GanttDataModel;
-import model.GanttTask;
 
-public class GanttChartHbox extends HBox {
+public class GanttChartHbox<T extends GanttDataModel> extends HBox {
 
     private double hboxSize = 10.0;
     // labels
@@ -40,7 +39,7 @@ public class GanttChartHbox extends HBox {
 
     }
 
-    public GanttChartHbox init(LocalDate firstDay, LocalDate lastDay, TimelineWithGraphicView<GanttDataModel> tableView) {
+    public GanttChartHbox<T> init(LocalDate firstDay, LocalDate lastDay, TimelineGraphControl<T> tableView) {
 
         // get list of years
         ListView<Integer> yearlist = getListOfYears(firstDay, lastDay);
@@ -123,14 +122,14 @@ public class GanttChartHbox extends HBox {
      * @param yearlist
      * @param tableView
      */
-    public void scrollToFirstDayOfYearsEvent(ListView<Integer> yearlist, TimelineWithGraphicView<GanttDataModel> tableView) {
+    public void scrollToFirstDayOfYearsEvent(ListView<Integer> yearlist, TimelineGraphControl<T> tableView) {
         yearlist.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
             @Override
             public void handle(MouseEvent event) {
                 int selectedYear = yearlist.getSelectionModel().getSelectedItem();
 
-                List<TableColumn<GanttDataModel, ?>> columnOfSelectedYearList = tableView.getColumns().stream()
+                List<TableColumn<T, ?>> columnOfSelectedYearList = tableView.getColumns().stream()
                         .filter(e -> e.getText() != null && e.getText().contains(String.valueOf(selectedYear)))
                         .collect(Collectors.toList());
 
@@ -149,12 +148,12 @@ public class GanttChartHbox extends HBox {
      * @param date
      * @param chooseFirstDayOfWeek
      */
-    public void scrollToGivenDate(Button button, LocalDate date, TimelineWithGraphicView tableView,
+    public void scrollToGivenDate(Button button, LocalDate date, TimelineGraphControl<T> tableView,
             boolean chooseFirstDayOfWeek) {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                TableColumn<GanttTask, GanttBar> column = tableView.findDayColumn(date, chooseFirstDayOfWeek);
+                TableColumn<T, GanttBar> column = tableView.findDayColumn(date, chooseFirstDayOfWeek);
 
                 if (column != null) {
                     scrollToDate(column, tableView);
@@ -171,7 +170,7 @@ public class GanttChartHbox extends HBox {
      * @param tableView
      * @param column
      */
-    private void scrollToDate(TableColumn<GanttTask, GanttBar> column, TimelineWithGraphicView tableView) {
+    private void scrollToDate(TableColumn<T, GanttBar> column, TimelineGraphControl<T> tableView) {
         tableView.scrollToColumn(column);
     }
 

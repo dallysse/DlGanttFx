@@ -29,7 +29,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import model.GanttTask;
 
-public class TimelineView extends VBox {
+public class TimelineControl extends VBox {
 
     // formats
     private DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\n MMM dd .yy");
@@ -60,7 +60,7 @@ public class TimelineView extends VBox {
      * @param isNumberOfMonth
      * @return
      */
-    public TimelineView init(int number, boolean isNumberOfMonth) {
+    public TimelineControl init(int number, boolean isNumberOfMonth) {
         currentYearMonth = YearMonth.now();
         LocalDate today = LocalDate.now();
         LocalDate startDay = (isNumberOfMonth) ? currentYearMonth.atDay(1) : today;
@@ -83,7 +83,7 @@ public class TimelineView extends VBox {
      * @param lastDay
      * @return
      */
-    public TimelineView generate(LocalDate firstDay, LocalDate lastDay) {
+    public TimelineControl generate(LocalDate firstDay, LocalDate lastDay) {
         // get list of days
         this.list = setListOfDay(firstDay, lastDay);
 

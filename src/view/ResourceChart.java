@@ -1,7 +1,12 @@
-package controls;
+package view;
 
 import java.time.LocalDate;
 
+import controls.GanttChartHbox;
+import controls.GanttResourceControl;
+import controls.GanttTableControl;
+import controls.TimelineGraphControl;
+import controls.TimelineGraphResourceControl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
@@ -12,23 +17,25 @@ public class ResourceChart  {
 
     private SplitPane ResourceChart;
     private  BorderPane ResourceChartWithMenu;
-    private GanttTableView ganttTableView;
-    private TimelineWithGraphicView timelineWithGraphicView; 
-    private GanttChartHbox menu;
+    private GanttTableControl<GanttResource> ganttTableControl;
+    private TimelineGraphControl<GanttResource> timelineGraphControl; 
+    private GanttChartHbox<GanttResource> menu;
  
     public ResourceChart(){
 
         ObservableList<GanttResource> resources = addGanttResources();
-        ganttTableView = new GanttResourceView().generate();
-        ganttTableView.setItems(resources);
+        ganttTableControl = new GanttResourceControl().generate();
+        ganttTableControl.setItems(resources);
 
-        timelineWithGraphicView = new TimelineResourceWithGraphicView().init(13, true);
-        timelineWithGraphicView.setGanttPiece(resources);
+        timelineGraphControl = new TimelineGraphResourceControl().init(13, true);
+        for(GanttResource resource: resources){
+            timelineGraphControl.setGanttPiece(resource);
+        }
 
 
-        menu = new GanttChartHbox().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(), timelineWithGraphicView);
+        menu = new GanttChartHbox<GanttResource>().init(timelineGraphControl.getStartDay(), timelineGraphControl.getEndDay(), timelineGraphControl);
 
-        ResourceChart = new SplitPane(ganttTableView, timelineWithGraphicView);
+        ResourceChart = new SplitPane(ganttTableControl, timelineGraphControl);
 
         ResourceChartWithMenu=new BorderPane();
         ResourceChartWithMenu.setTop(menu);  

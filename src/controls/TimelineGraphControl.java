@@ -1,39 +1,24 @@
 package controls;
 
-import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.controlsfx.control.PropertySheet.Item;
-
-import util.DateUtils;
-
 import Widgets.GanttBar;
-import Widgets.GanttBar.PieceType;
 import Widgets.ObservableGanttBar;
-import javafx.beans.value.ObservableValue;
+import Widgets.GanttBar.PieceType;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
-import javafx.scene.control.Cell;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.input.MouseButton;
-import javafx.scene.paint.Color;
-import javafx.util.Callback;
 import model.GanttDataModel;
-import model.GanttTask;
+import util.DateUtils;
 
-public abstract class TimelineWithGraphicView<T extends GanttDataModel> extends TableView<T> {
+public abstract class TimelineGraphControl<T extends GanttDataModel> extends TableView<T> {
 
     // formats
     private DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\n dd ");
@@ -60,7 +45,7 @@ public abstract class TimelineWithGraphicView<T extends GanttDataModel> extends 
      * @param isNumberOfMonth
      * @return
      */
-    public TimelineWithGraphicView<T> init(int number, boolean isNumberOfMonth) {
+    public TimelineGraphControl<T> init(int number, boolean isNumberOfMonth) {
         currentYearMonth = YearMonth.now();
         LocalDate today = LocalDate.now();
         this.startDay = (isNumberOfMonth) ? currentYearMonth.atDay(1) : today;
@@ -69,7 +54,7 @@ public abstract class TimelineWithGraphicView<T extends GanttDataModel> extends 
         return generate(startDay, endDay);
     }
 
-    public TimelineWithGraphicView<T> generate(LocalDate firstDay, LocalDate lastDay) {
+    public TimelineGraphControl<T> generate(LocalDate firstDay, LocalDate lastDay) {
         // get list of days
         setListOfDay(firstDay, lastDay);
         return this;
@@ -126,24 +111,21 @@ public abstract class TimelineWithGraphicView<T extends GanttDataModel> extends 
         return this;
     }
      public void setGanttPiece(ObservableList<T> ganttTasks) {
+        setItems(FXCollections.unmodifiableObservableList(ganttTasks));
+        //getItems().addAll(ganttTasks);
         for (T ganttData : ganttTasks) {
             setGanttPiece(ganttData);
         }
-
     }
 
     public void setGanttPiece(T ganttData) {
-        this.getItems().add(ganttData);
-
         // check if start and end are defined
         if (ganttData.getStartDate() != null && ganttData.getEndDate() != null) {
             TableColumn<T, GanttBar> firstColumn = findDayColumn(ganttData.getStartDate());
             TableColumn<T, GanttBar> lastColumn = findDayColumn(ganttData.getEndDate());
-
             if (firstColumn != null && lastColumn != null) {
                 // draw diagram
                 drawDiagram(firstColumn, lastColumn, ganttData);
-
             } else {
                 System.err.println(String.format(
                         "gantt piece could not be defined. reason: At least one column could not be found for start: %s end: %s",
@@ -198,35 +180,49 @@ public abstract class TimelineWithGraphicView<T extends GanttDataModel> extends 
                 .filter(e -> e.getText() != null && e.getText().equalsIgnoreCase(columnName)).findFirst();
     }
 
+
     public void drawDiagram(TableColumn<T, GanttBar> startColumn, TableColumn<T, GanttBar> endColumn,
             T ganttData) {
         boolean isNextCenter = false;
-        
-        if (startColumn.equals(endColumn)) {
-            ((TableColumn<T, GanttBar>) startColumn)
-                    .setCellValueFactory(e -> new ObservableGanttBar(PieceType.COMPLET, ganttData.getName()));
-        } else {
-            for (TableColumn<T, ?> column : getColumns().stream()
-                    .flatMap(e -> e.getColumns().stream()).collect(Collectors.toList())) {
-                if (column.equals(startColumn)) {
-                    isNextCenter = true;
-                    ((TableColumn<T, GanttBar>) column).setCellValueFactory(
-                            e -> new ObservableGanttBar(PieceType.BEGINNING, ganttData.getName()));
-                } else if (column.equals(endColumn)) {
-                    isNextCenter = false;
-                    ((TableColumn<T, GanttBar>) column)
-                            .setCellValueFactory(e -> new ObservableGanttBar(PieceType.END));
-                         break;
-                        } else if (isNextCenter) {
-                    ((TableColumn<T, GanttBar>) column)
-                            .setCellValueFactory(e -> {
-                                return new ObservableGanttBar(PieceType.CENTER);
-                            });
+        for ( T row  : this.getItems()) {
+            //for (int i = 0; i < getItems().size(); i++) {
+                System.out.println("Selected Index : "+ row.getName());
+                    //System.out.println("Selected Index : "+i + "  "+ ganttData.getName());
                 }
+            
+        
+            //if(row==null){
+                //System.out.println("row est null" );
+            //}else {
+                //System.out.println(row.getName() );
+                 if (startColumn.equals(endColumn)) {
+                    getItems().clear();
+                  ((TableColumn<T, GanttBar>) startColumn)
+                            .setCellValueFactory(e -> new ObservableGanttBar(PieceType.COMPLET, ganttData.getName()));
+                } else {
+                    for (TableColumn<T, ?> column : getColumns().stream()
+                            .flatMap(e -> e.getColumns().stream()).collect(Collectors.toList())) {
+                        if (column.equals(startColumn)) {                        
+                            isNextCenter = true;
+                            ((TableColumn<T, GanttBar>) column).setCellValueFactory(
+                                    e -> new ObservableGanttBar(PieceType.BEGINNING, ganttData.getName()));
+                        } else if (column.equals(endColumn)) {
+                            isNextCenter = false;
+                            ((TableColumn<T, GanttBar>) column)
+                                    .setCellValueFactory(e -> new ObservableGanttBar(PieceType.END));
+                                 break;
+                                } else if (isNextCenter) {
+                            ((TableColumn<T, GanttBar>) column)
+                                    .setCellValueFactory(e -> {
+                                        return new ObservableGanttBar(PieceType.CENTER);
+                                    });
+                        }
+                    }
+        
+                } 
+            
             }
-
-        }
-
+    
         /*
          * Callback<TableColumn<T, GanttBar>, TableCell<T, GanttBar>> cellFactory = new
          * Callback<TableColumn<T, GanttBar>, TableCell<T, GanttBar>>() {
@@ -288,27 +284,6 @@ public abstract class TimelineWithGraphicView<T extends GanttDataModel> extends 
          * if(cellFactory!=null){((TableColumn<T, GanttBar>)
          * getColumns().get(0)).setCellFactory(cellFactory);}
          */
-
-    }
-
-    private void checRow() {
-        TableRow<T> row = new TableRow<>();
-
-        this.setRowFactory(tv -> {
-
-            if (!row.isEmpty()) {
-
-                T clickedRow = row.getItem();
-                printRow(clickedRow);
-            }
-
-            return row;
-        });
-    }
-
-    private void printRow(T item) {
-        System.out.println("ta tete" + item.getName());
-    }
 
     public DateTimeFormatter getDayFormatter() {
         return dayFormatter;

@@ -1,7 +1,12 @@
-package controls;
+package view;
 
 import java.time.LocalDate;
 
+import controls.GanttChartHbox;
+import controls.GanttTableControl;
+import controls.GanttTaskControl;
+import controls.TimelineGraphControl;
+import controls.TimelineTaskGraphControl;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.SplitPane;
@@ -11,23 +16,24 @@ import model.GanttTask;
 public class GanttChart {
     private BorderPane ganttChartWithMenu;
     private SplitPane ganttChart;
-    private GanttTableView ganttTaskView;
-    private TimelineWithGraphicView timelineWithGraphicView;
-    private GanttChartHbox menu;
+    private GanttTableControl<GanttTask> ganttTaskControl;
+    private TimelineGraphControl<GanttTask> timelineGraphControl;
+    private GanttChartHbox<GanttTask> menu;
 
     public GanttChart() {
 
         ObservableList<GanttTask> ganttTasks = addGanttTasks();
-        ganttTaskView = new GanttTaskView().generate();
-        ganttTaskView.setItems(ganttTasks);
+        ganttTaskControl = new GanttTaskControl().generate();
+        ganttTaskControl.setItems(ganttTasks);
 
-        timelineWithGraphicView = new TimelineTaskWithGraphicView().init(13, true);
-        timelineWithGraphicView.setGanttPiece(ganttTasks);
+        timelineGraphControl = new TimelineTaskGraphControl().init(13, true);
+            timelineGraphControl.setGanttPiece(ganttTasks);
+        
 
-        menu = new GanttChartHbox().init(timelineWithGraphicView.getStartDay(), timelineWithGraphicView.getEndDay(),
-                timelineWithGraphicView);
+        menu = new GanttChartHbox<GanttTask>().init(timelineGraphControl.getStartDay(), timelineGraphControl.getEndDay(),
+        timelineGraphControl);
 
-        ganttChart = new SplitPane(ganttTaskView.getTableWithPriorityLegendView(), timelineWithGraphicView);
+        ganttChart = new SplitPane(ganttTaskControl.getTableWithPriorityLegendControl(), timelineGraphControl);
 
         ganttChartWithMenu = new BorderPane();
         ganttChartWithMenu.setTop(menu);

@@ -14,7 +14,7 @@ import javafx.scene.shape.Rectangle;
 import model.GanttTask;
 import model.TaskPriority;
 
-public class GanttTaskView extends GanttTableView<GanttTask> {
+public class GanttTaskControl extends GanttTableControl<GanttTask> {
     private GridPane legendBox = new GridPane();
     private TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED);
     private TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE);
@@ -23,7 +23,7 @@ public class GanttTaskView extends GanttTableView<GanttTask> {
     private String priority = "Task Priority";
     private String isCritical = "IsCritical";
 
-    public GanttTaskView() {
+    public GanttTaskControl() {
         super();
         this.name = "Task Name";
         this.start = "Task Start";
@@ -35,7 +35,7 @@ public class GanttTaskView extends GanttTableView<GanttTask> {
 
     @Override
     public void init() {
-        tableWithPriorityLegendView.setBottom(legendBox);
+        tableWithPriorityLegendControl.setBottom(legendBox);
         addPriorityLegend();
     }
 
