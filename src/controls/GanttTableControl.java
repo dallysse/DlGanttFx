@@ -161,4 +161,9 @@ public abstract class GanttTableControl<T extends GanttDataModel> extends TableV
         this.tableWithPriorityLegendControl = tableWithPriorityLegendView;
     }
 
+        public T getSelectItem() {
+            T p = getSelectionModel().getSelectedItem();
+
+            return p;          
+        }
 }

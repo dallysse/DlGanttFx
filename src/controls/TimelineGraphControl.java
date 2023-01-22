@@ -11,12 +11,18 @@ import java.util.stream.Collectors;
 import Widgets.GanttBar;
 import Widgets.ObservableGanttBar;
 import Widgets.GanttBar.PieceType;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TableColumn.CellDataFeatures;
+import javafx.util.Callback;
 import model.GanttDataModel;
 import util.DateUtils;
+import controls.GanttTableControl;
 
 public abstract class TimelineGraphControl<T extends GanttDataModel> extends TableView<T> {
 
@@ -110,7 +116,8 @@ public abstract class TimelineGraphControl<T extends GanttDataModel> extends Tab
 
         return this;
     }
-     public void setGanttPiece(ObservableList<T> ganttTasks) {
+    
+    public void setGanttPiece(ObservableList<T> ganttTasks) {
         setItems(FXCollections.unmodifiableObservableList(ganttTasks));
         //getItems().addAll(ganttTasks);
         for (T ganttData : ganttTasks) {
@@ -182,108 +189,75 @@ public abstract class TimelineGraphControl<T extends GanttDataModel> extends Tab
 
 
     public void drawDiagram(TableColumn<T, GanttBar> startColumn, TableColumn<T, GanttBar> endColumn,
-            T ganttData) {
-        boolean isNextCenter = false;
-        for ( T row  : this.getItems()) {
-            //for (int i = 0; i < getItems().size(); i++) {
-                System.out.println("Selected Index : "+ row.getName());
-                    //System.out.println("Selected Index : "+i + "  "+ ganttData.getName());
-                }
+    T ganttData) {
+boolean isNextCenter = false;
+System.out.println("Gantt : "+ ganttData.getName());
+
+if (startColumn.equals(endColumn)) {
+    ((TableColumn<T, GanttBar>) startColumn)
+        .setCellValueFactory(new Callback<CellDataFeatures<T, GanttBar>, ObservableValue<GanttBar>>() {
+        public ObservableValue<GanttBar> call(CellDataFeatures<T, GanttBar> cell) {
+            // p.getValue() returns the gantt data instance for a particular TableView row
             
-        
-            //if(row==null){
-                //System.out.println("row est null" );
-            //}else {
-                //System.out.println(row.getName() );
-                 if (startColumn.equals(endColumn)) {
-                    getItems().clear();
-                  ((TableColumn<T, GanttBar>) startColumn)
-                            .setCellValueFactory(e -> new ObservableGanttBar(PieceType.COMPLET, ganttData.getName()));
-                } else {
-                    for (TableColumn<T, ?> column : getColumns().stream()
-                            .flatMap(e -> e.getColumns().stream()).collect(Collectors.toList())) {
-                        if (column.equals(startColumn)) {                        
-                            isNextCenter = true;
-                            ((TableColumn<T, GanttBar>) column).setCellValueFactory(
-                                    e -> new ObservableGanttBar(PieceType.BEGINNING, ganttData.getName()));
-                        } else if (column.equals(endColumn)) {
-                            isNextCenter = false;
-                            ((TableColumn<T, GanttBar>) column)
-                                    .setCellValueFactory(e -> new ObservableGanttBar(PieceType.END));
-                                 break;
-                                } else if (isNextCenter) {
-                            ((TableColumn<T, GanttBar>) column)
-                                    .setCellValueFactory(e -> {
-                                        return new ObservableGanttBar(PieceType.CENTER);
-                                    });
-                        }
-                    }
-        
-                } 
-            
+            if(cell != null && cell.getValue().getName().equals(ganttData.getName())){
+                return new ObservableGanttBar(PieceType.COMPLET, ganttData.getName());
+            }else{
+                return null;
             }
-    
-        /*
-         * Callback<TableColumn<T, GanttBar>, TableCell<T, GanttBar>> cellFactory = new
-         * Callback<TableColumn<T, GanttBar>, TableCell<T, GanttBar>>() {
-         * public TableCell call(TableColumn<T, GanttBar> p) {
-         * return new TableCell<T, GanttBar>() {
-         * 
-         * @Override
-         * public void updateItem(GanttBar item, boolean empty) {
-         * boolean isNextCenter = false;
-         * 
-         * if (startColumn.equals(endColumn)) {
-         * ((TableColumn<T, GanttBar>) startColumn)
-         * .setCellValueFactory(e -> {
-         * return new ObservableGanttBar(PieceType.CENTER);
-         * });
-         * } else {
-         * for (TableColumn<T, ?> column : getColumns().stream()
-         * .flatMap(e -> e.getColumns().stream()).collect(Collectors.toList())) {
-         * 
-         * if (column.equals(startColumn)) {
-         * isNextCenter = true;
-         * ((TableColumn<T, GanttBar>) column)
-         * .setCellValueFactory(e -> {
-         * return new ObservableGanttBar(PieceType.CENTER);
-         * });
-         * } else if (column.equals(endColumn) ) {
-         * isNextCenter = false;
-         * ((TableColumn<T, GanttBar>) column)
-         * .setCellValueFactory(e -> {
-         * return new ObservableGanttBar(PieceType.CENTER);
-         * });
-         * break;
-         * } else if (isNextCenter) {
-         * ((TableColumn<T, GanttBar>) column)
-         * .setCellValueFactory(e -> {
-         * return new ObservableGanttBar(PieceType.CENTER);
-         * });
-         * }
-         * }
-         * }
-         * 
-         * 
-         * 
-         * 
-         * if (item != null) {
-         * super.updateItem(item, empty);
-         * if (empty) {
-         * setGraphic(null);
-         * } else {
-         * setGraphic(new GanttBar(PieceType.CENTER));
-         * }
-         * }
-         * }
-         * 
-         * };
-         * }
-         * };
-         * 
-         * if(cellFactory!=null){((TableColumn<T, GanttBar>)
-         * getColumns().get(0)).setCellFactory(cellFactory);}
-         */
+
+        }
+        }); 
+} else {
+    for (TableColumn<T, ?> column : getColumns().stream()
+            .flatMap(e -> e.getColumns().stream()).collect(Collectors.toList())) {
+        if (column.equals(startColumn)) {                        
+            isNextCenter = true;
+            ((TableColumn<T, GanttBar>) column)
+                .setCellValueFactory(new Callback<CellDataFeatures<T, GanttBar>, ObservableValue<GanttBar>>() {
+                public ObservableValue<GanttBar> call(CellDataFeatures<T, GanttBar> cell) {
+                    // p.getValue() returns the gantt data instance for a particular TableView row
+
+                    if(cell != null && cell.getValue().getName().equals(ganttData.getName())){
+                        return new ObservableGanttBar(PieceType.BEGINNING, ganttData.getName());
+                    }else{
+                        return null;
+                    }
+                }
+                });
+        } else if (column.equals(endColumn)) {
+            isNextCenter = false;
+            ((TableColumn<T, GanttBar>) column)
+                .setCellValueFactory(new Callback<CellDataFeatures<T, GanttBar>, ObservableValue<GanttBar>>() {
+                public ObservableValue<GanttBar> call(CellDataFeatures<T, GanttBar> cell) {
+                    // p.getValue() returns the gantt data instance for a particular TableView row
+
+                    if(cell != null && cell.getValue().getName().equals(ganttData.getName())){
+                        return new ObservableGanttBar(PieceType.END);
+                    }else{
+                        return null;
+                    }
+                }
+                }); 
+                    break;
+                } else if (isNextCenter) {
+            ((TableColumn<T, GanttBar>) column)
+                .setCellValueFactory(new Callback<CellDataFeatures<T, GanttBar>, ObservableValue<GanttBar>>() {
+                public ObservableValue<GanttBar> call(CellDataFeatures<T, GanttBar> cell) {
+                    // p.getValue() returns the gantt data instance for a particular TableView row
+
+                    if(cell != null && cell.getValue().getName().equals(ganttData.getName())){
+                        return new ObservableGanttBar(PieceType.CENTER);
+                    }else{
+                        return null;
+                    }
+                }
+                });
+        }
+    }
+
+} 
+
+}
 
     public DateTimeFormatter getDayFormatter() {
         return dayFormatter;

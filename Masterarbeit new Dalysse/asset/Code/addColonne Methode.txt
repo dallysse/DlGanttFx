@@ -1,0 +1,63 @@
+public abstract class GanttTableView<T> extends TableView<T> {
+
+    private void createGanttTableView() {
+        // Creating columns
+        TableColumn<T, String> nameCol = new TableColumn<T, String>(name);
+        nameCol.setCellValueFactory(new PropertyValueFactory<T, String>("name"));
+
+        TableColumn<T, LocalDate> startCol = new TableColumn<T, LocalDate>(start);
+        startCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+
+        TableColumn<T, LocalDate> endCol = new TableColumn<T, LocalDate>(end);
+        endCol.setCellValueFactory(new PropertyValueFactory<T, LocalDate>("endDate"));
+
+        TableColumn<T, Integer> durationCol = new TableColumn<T, Integer>(duration);
+        durationCol.setCellValueFactory(new PropertyValueFactory<T, Integer>("duration"));
+
+        TableColumn<T, model.GanttDataModelState> stateCol = new TableColumn<T, GanttDataModelState>(state);
+        stateCol.setCellValueFactory(new PropertyValueFactory<T, GanttDataModelState>("state"));
+
+        TableColumn<T, Double> progressCol = new TableColumn<T, Double>(progress);
+        progressCol.setCellValueFactory(new PropertyValueFactory<T, Double>(
+                "progress"));
+        progressCol
+                .setCellFactory(ProgressBarTableCell.<T>forTableColumn());
+
+        Callback<TableColumn<T, Double>, TableCell<T, Double>> cellFactory = new Callback<TableColumn<T, Double>, TableCell<T, Double>>() {
+            public TableCell call(TableColumn<T, Double> p) {
+                return new TableCell<T, Double>() {
+
+                    private ProgressBar pb = new ProgressBar();
+
+                    @Override
+                    public void updateItem(Double item, boolean empty) {
+                        if (item != null) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setText(null);
+                                setGraphic(null);
+                            } else {
+                                pb.setProgress(item);
+                                setGraphic(pb);
+                                pb.setStyle("-fx-accent: green");
+                            }
+                        }
+                    }
+                };
+            }
+        };
+        progressCol.setCellFactory(cellFactory);
+
+        TableColumn<T, String> infoCol = new TableColumn<T, String>(info);
+        infoCol.setCellValueFactory(new PropertyValueFactory<T, String>("info"));
+
+        this.getColumns().addAll(nameCol, startCol, endCol, durationCol, stateCol, progressCol, infoCol);
+
+        // add specific columns
+        addSpecificColumns();
+    }
+
+    public abstract void addSpecificColumns();
+
+    }
+}

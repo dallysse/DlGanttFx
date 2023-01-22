@@ -27,5 +27,6 @@
         "/Users/dallyssedjouhou/Downloads/flexganttfx-11.12.4-bin/lib/license4j-1.4.0.jar"
     ],
     "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
-    "workbench.colorTheme": "Default Light+"
+    "workbench.colorTheme": "Default Light+",
+    "java.dependency.packagePresentation": "flat"
 }
