@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class GanttResource extends GanttDataModel {
+public class GanttResource extends Activity {
 
 	private SimpleStringProperty role;
 	private SimpleObjectProperty<ResourceType> type;
@@ -16,12 +16,12 @@ public class GanttResource extends GanttDataModel {
 		super();
 	}
 
-	public GanttResource(String name, LocalDate startDate, LocalDate endDate) {
-		super(name, startDate, endDate);
+	public GanttResource(int id, String name, LocalDate startDate, LocalDate endDate) {
+		super(id, name, startDate, endDate);
 	}
 
-	public GanttResource(String name, LocalDate startDate, LocalDate endDate, String info, String role) {
-		super(name, startDate, endDate, info);
+	public GanttResource(int id, String name, LocalDate startDate, LocalDate endDate, String info, String role) {
+		super(id, name, startDate, endDate, info);
 		this.role = new SimpleStringProperty(role);
 	}
 

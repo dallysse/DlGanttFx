@@ -7,7 +7,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 
-public class GanttTask extends GanttDataModel {
+public class GanttTask extends Activity {
 
 	private SimpleIntegerProperty priority;
 	private BooleanProperty isCritical;
@@ -16,13 +16,13 @@ public class GanttTask extends GanttDataModel {
 		super();
 	}
 
-	public GanttTask(String name, LocalDate startDate, LocalDate endDate) {
-		super(name, startDate, endDate);
+	public GanttTask(int id, String name, LocalDate startDate, LocalDate endDate) {
+		super(id, name, startDate, endDate);
 	}
 
-	public GanttTask(String name, LocalDate startDate, LocalDate endDate, Integer priority, boolean isCritical,
+	public GanttTask(int id, String name, LocalDate startDate, LocalDate endDate, Integer priority, boolean isCritical,
 			String info) {
-		super(name, startDate, endDate, info);
+		super(id, name, startDate, endDate, info);
 		this.priority = new SimpleIntegerProperty(priority);
 		this.isCritical = new SimpleBooleanProperty(isCritical);
 	}
