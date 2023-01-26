@@ -17,6 +17,10 @@ public class ObservableGanttBar implements ObservableValue<GanttBar> {
 		piece = new GanttBar(type, id, name);
 	}
 
+	public ObservableGanttBar(PieceType type, int id) {
+		piece = new GanttBar(type, id);
+	}
+
 	@Override
 	public void addListener(InvalidationListener listener) {
 		// TODO Auto-generated method stub
