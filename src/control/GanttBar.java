@@ -20,6 +20,27 @@ public class GanttBar extends Pane {
 		this(type, 0, null);
 	}
 
+	public GanttBar(PieceType type, int id) {
+		this.type = type;
+		this.id = id;
+		switch (type) {
+			case BEGINNING:
+				getStyleClass().add("gantt-piece-beginning");
+				getChildren().add(new Label("" + (id + 1)));
+				break;
+			case CENTER:
+				getStyleClass().add("gantt-piece-center");
+				break;
+			case END:
+				getStyleClass().add("gantt-piece-end");
+				break;
+			case COMPLET:
+				getStyleClass().add("gantt-piece-complet");
+				getChildren().add(new Label("" + (id + 1)));
+				break;
+		}
+	}
+
 	public GanttBar(PieceType type, int id, String name) {
 		this.type = type;
 		this.id = id;
