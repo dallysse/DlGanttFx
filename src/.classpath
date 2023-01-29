@@ -2,5 +2,13 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="src" path=""/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx.controls.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx-swt.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx.graphics.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx.media.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx.web.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx.fxml.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx.base.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/javafx.swing.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

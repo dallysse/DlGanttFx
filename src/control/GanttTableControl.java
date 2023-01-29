@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Insets;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -14,15 +12,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.ProgressBarTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Callback;
 import model.Activity;
 import model.ActivityState;
-import model.TaskPriority;
 
 public abstract class GanttTableControl<T extends Activity> extends TableView<T> {
 
@@ -129,7 +121,8 @@ public abstract class GanttTableControl<T extends Activity> extends TableView<T>
         TableColumn<T, String> descriptionCol = new TableColumn<T, String>(description);
         descriptionCol.setCellValueFactory(new PropertyValueFactory<T, String>("description"));
 
-        this.getColumns().addAll(nameCol, startCol, endCol, durationCol, stateCol, progressCol, descriptionCol);
+        this.getColumns().addAll(numberCol, nameCol, startCol, endCol, durationCol, stateCol, progressCol,
+                descriptionCol);
 
         // add specific columns
         addSpecificColumns();

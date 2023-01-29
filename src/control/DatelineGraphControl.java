@@ -52,13 +52,16 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
     public DatelineGraphControl<T> init(int number, boolean isNumberOfMonth) {
         currentYearMonth = YearMonth.now();
         LocalDate today = LocalDate.now();
-        this.startDay = (isNumberOfMonth) ? currentYearMonth.atDay(1) : today;
-        this.endDay = (isNumberOfMonth) ? currentYearMonth.plusMonths(number).atEndOfMonth() : today.plusDays(number);
-        this.getStyleClass().add("timeline");
-        return generate(startDay, endDay);
+        LocalDate firstDay = (isNumberOfMonth) ? currentYearMonth.atDay(1) : today;
+        LocalDate lastDay = (isNumberOfMonth) ? currentYearMonth.plusMonths(number).atEndOfMonth()
+                : today.plusDays(number);
+        return generate(firstDay, lastDay);
     }
 
     public DatelineGraphControl<T> generate(LocalDate firstDay, LocalDate lastDay) {
+        this.startDay = firstDay;
+        this.endDay = lastDay;
+        this.getStyleClass().add("timeline");
         // get list of days
         setListOfDay(firstDay, lastDay);
         return this;

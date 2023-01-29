@@ -1,31 +1,21 @@
 {
     "java.project.sourcePaths": ["src"],
     "java.project.outputPath": "bin",
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
+    "java.project.referencedLibraries": {
+        "include": [        "lib/**/*.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx.base.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx.controls.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx.swing.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx.web.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx.fxml.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx.media.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx.base.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx.controls.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx.swing.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx.web.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx-swt.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx.fxml.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx.graphics.jar",
-        "/Users/dallyssedjouhou/Downloads/javafx-sdk-19 2/lib/javafx.media.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx-swt.jar",
         "/Users/dallyssedjouhou/Downloads/javafx-sdk-19/lib/javafx.graphics.jar",
-        "/Users/dallyssedjouhou/Downloads/flexganttfx-11.12.4-bin/lib/flexganttfx-extras-11.12.4.jar",
-        "/Users/dallyssedjouhou/Downloads/flexganttfx-11.12.4-bin/lib/flexganttfx-view-11.12.4.jar",
-        "/Users/dallyssedjouhou/Downloads/flexganttfx-11.12.4-bin/lib/flexganttfx-model-11.12.4.jar",
-        "/Users/dallyssedjouhou/Downloads/flexganttfx-11.12.4-bin/lib/flexganttfx-core-11.12.4.jar",
-        "/Users/dallyssedjouhou/Downloads/flexganttfx-11.12.4-bin/lib/controlsfx-11.0.3.jar",
-        "/Users/dallyssedjouhou/Downloads/flexganttfx-11.12.4-bin/lib/license4j-1.4.0.jar"
-    ],
+       ],
+
+    
+    },
+    
     "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
     "workbench.colorTheme": "Default Light+",
     "java.dependency.packagePresentation": "flat"
