@@ -33,26 +33,26 @@
   -fx-label-padding: 1, 1, 1, 1;
 }
 
-.gantt-piece-beginning {
+.gantt-part-beginning {
   -fx-background-color: #5bb336, #54cc82, #70ca4a, #54cc82;
   -fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 2, 3 0 4 3;
   -fx-border-width: 0;
   -fx-background-radius: 5 0 0 5;
 }
 
-.gantt-piece-center {
+.gantt-part-center {
   -fx-background-color: #61b83c, #54cc82, #6ad83b, #54cc82;
   -fx-background-insets: 0 0 0 0, 0 0 2 0, 2 0 4 0, 3 0 4 0;
   -fx-border-width: 0;
 }
 
-.gantt-piece-end {
+.gantt-part-end {
   -fx-background-color: #5bb336, #54cc82, #60c833, #54cc82;
   -fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
   -fx-border-width: 0;
   -fx-background-radius: 0 5 5 0;
 }
-.gantt-piece-complet {
+.gantt-complet {
   -fx-background-color: #6fdc41, #54cc82, #75dc48, #54cc82;
   -fx-background-insets: 0 0 0 0, 0 0 2 0, 2 2 4 0, 3 3 4 0;
   -fx-border-width: 0;

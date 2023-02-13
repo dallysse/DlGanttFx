@@ -20,9 +20,8 @@ public class GanttResource extends Activity {
 		super(id, name, startDate, endDate);
 	}
 
-	public GanttResource(int id, String name, LocalDate startDate, LocalDate endDate, String info, String role) {
-		super(id, name, startDate, endDate, info);
-		this.role = new SimpleStringProperty(role);
+	public GanttResource(int id, String name, LocalDate startDate, LocalDate endDate, String role) {
+		super(id, name, startDate, endDate, role);
 	}
 
 	public StringProperty roleProperty() {

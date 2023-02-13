@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import model.Activity;
+import model.GanttBarPart;
 
 public class GanttChartHbox<T extends Activity> extends HBox {
 
@@ -151,7 +152,7 @@ public class GanttChartHbox<T extends Activity> extends HBox {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent e) {
-                TableColumn<T, GanttBar> column = tableView.findDayColumn(date, chooseFirstDayOfWeek);
+                TableColumn<T, GanttBarPart> column = tableView.findDayColumn(date, chooseFirstDayOfWeek);
 
                 if (column != null) {
                     scrollToDate(column, tableView);
@@ -169,7 +170,7 @@ public class GanttChartHbox<T extends Activity> extends HBox {
      * @param tableView
      * @param column
      */
-    private void scrollToDate(TableColumn<T, GanttBar> column, DatelineGraphControl<T> tableView) {
+    private void scrollToDate(TableColumn<T, GanttBarPart> column, DatelineGraphControl<T> tableView) {
         tableView.scrollToColumn(column);
     }
 
