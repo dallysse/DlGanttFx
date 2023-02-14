@@ -1,12 +1,8 @@
 package control;
 
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 import model.GanttResource;
 
 public class GanttResourceControl extends GanttTableControl<GanttResource> {
-
-    private String role = "Role";
 
     public GanttResourceControl() {
         super();
@@ -25,6 +21,5 @@ public class GanttResourceControl extends GanttTableControl<GanttResource> {
     @Override
     public void addSpecificColumns() {
     }
-
 
 }

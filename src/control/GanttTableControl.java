@@ -32,6 +32,11 @@ public abstract class GanttTableControl<T extends Activity> extends TableView<T>
 
     }
 
+    /**
+     * creating a table with a legen for priority
+     * 
+     * @return
+     */
     public GanttTableControl<T> generate() {
         tableWithPriorityLegendControl = new BorderPane();
         tableWithPriorityLegendControl.setCenter(this);
@@ -42,8 +47,10 @@ public abstract class GanttTableControl<T extends Activity> extends TableView<T>
 
     public abstract void init();
 
+    /**
+     * creating columns and the adding in table
+     */
     private void createGanttTableView() {
-        // Creating columns
         TableColumn<T, T> numberCol = new TableColumn();
         numberCol.setCellValueFactory(new Callback<CellDataFeatures<T, T>, ObservableValue<T>>() {
 
@@ -72,7 +79,6 @@ public abstract class GanttTableControl<T extends Activity> extends TableView<T>
         });
         numberCol.setSortable(false);
 
-        // Creating columns
         TableColumn<T, String> nameCol = new TableColumn<T, String>(name);
         nameCol.setCellValueFactory(new PropertyValueFactory<T, String>("name"));
 
@@ -128,6 +134,9 @@ public abstract class GanttTableControl<T extends Activity> extends TableView<T>
         addSpecificColumns();
     }
 
+    /**
+     * 
+     */
     public abstract void addSpecificColumns();
 
     public String getName() {

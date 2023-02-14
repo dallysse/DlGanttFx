@@ -27,34 +27,37 @@ public class Activity {
 	}
 
 	public Activity(int id, String name, LocalDate startDate, LocalDate endDate) {
-		this.id = new SimpleIntegerProperty(id);
-		this.name = new SimpleStringProperty(name);
-		this.startDate = new SimpleObjectProperty<>(startDate);
-		this.endDate = new SimpleObjectProperty<>(endDate);
-		double totalWorkingDays = Duration.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toDays() + 1;
-		this.duration = new SimpleIntegerProperty((int) totalWorkingDays);
-		if (startDate == null || endDate == null || LocalDate.now().isBefore(startDate)) {
-			this.progress = new SimpleDoubleProperty(0.0);
-		} else if (LocalDate.now().isAfter(endDate)) {
-			this.progress = new SimpleDoubleProperty(1.0);
-		} else {
-			this.progress = new SimpleDoubleProperty(
-					(double) (Duration.between(startDate.atStartOfDay(), LocalDate.now().atStartOfDay()).toDays() + 1)
-							/ totalWorkingDays);
-		}
-
-		this.state = (progress == null || progress.get() == 0.0) ? ActivityState.HALTED
-				: ((progress.get() == 1.0) ? ActivityState.TERMINATED : ActivityState.RUNNING);
-	}
-
-	public Activity(int id, String name, LocalDate startDate, LocalDate endDate, String description) {
-		check(startDate.isBefore(endDate), "The start Date can't before end Date");
 		check(id >= 0, "the Id must be > 0 ");
 		check(!name.isEmpty(), "the name can't be empty");
 		this.id = new SimpleIntegerProperty(id);
 		this.name = new SimpleStringProperty(name);
 		this.startDate = new SimpleObjectProperty<>(startDate);
 		this.endDate = new SimpleObjectProperty<>(endDate);
+		this.startDate = new SimpleObjectProperty<>(startDate);
+		this.endDate = new SimpleObjectProperty<>(endDate);
+		setValue(startDate, endDate);
+
+	}
+
+	public Activity(int id, String name, LocalDate startDate, LocalDate endDate, String description) {
+		check(id >= 0, "the Id must be > 0 ");
+		check(!name.isEmpty(), "the name can't be empty");
+		this.id = new SimpleIntegerProperty(id);
+		this.name = new SimpleStringProperty(name);
+		this.description = new SimpleStringProperty(description);
+		this.startDate = new SimpleObjectProperty<>(startDate);
+		this.endDate = new SimpleObjectProperty<>(endDate);
+		setValue(startDate, endDate);
+	}
+
+	/**
+	 * calculate Duration, progress and deduct state
+	 * 
+	 * @param startDate
+	 * @param endDate
+	 */
+	private void setValue(LocalDate startDate, LocalDate endDate) {
+		check(startDate.isBefore(endDate), "The start Date can't before end Date");
 		double totalWorkingDays = Duration.between(startDate.atStartOfDay(), endDate.atStartOfDay()).toDays() + 1;
 		this.duration = new SimpleIntegerProperty((int) totalWorkingDays);
 		if (startDate == null || endDate == null || LocalDate.now().isBefore(startDate)) {
@@ -68,7 +71,6 @@ public class Activity {
 		}
 		this.state = (progress == null || progress.get() == 0.0) ? ActivityState.HALTED
 				: ((progress.get() == 1.0) ? ActivityState.TERMINATED : ActivityState.RUNNING);
-		this.description = new SimpleStringProperty(description);
 	}
 
 	public IntegerProperty idProperty() {

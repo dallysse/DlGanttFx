@@ -31,6 +31,13 @@ public class GanttChartHbox<T extends Activity> extends HBox {
 
     }
 
+    /**
+     * 
+     * @param nowLabel
+     * @param earliestLabel
+     * @param lastestLabel
+     * @param hboxSize
+     */
     public GanttChartHbox(String nowLabel, String earliestLabel, String lastestLabel, double hboxSize) {
         this.nowLabel = nowLabel;
         this.earliestLabel = earliestLabel;
@@ -39,6 +46,13 @@ public class GanttChartHbox<T extends Activity> extends HBox {
 
     }
 
+    /**
+     * 
+     * @param firstDay
+     * @param lastDay
+     * @param tableView
+     * @return
+     */
     public GanttChartHbox<T> init(LocalDate firstDay, LocalDate lastDay, DatelineGraphControl<T> tableView) {
 
         // get list of years

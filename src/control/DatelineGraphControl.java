@@ -30,15 +30,11 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
     // formats
     private DateTimeFormatter dayFormatter = DateTimeFormatter.ofPattern("E\n dd ");
     private DateTimeFormatter weekFormatter = DateTimeFormatter.ofPattern("EEEE dd. MMM yyyy ");
-
     private final static String styleFormat = "-fx-background-color: %s";
 
     private String weekendColor = "lightblue";
-
-    TableColumn<T, GanttBarPart> weekSubcolumn;
-
+    private TableColumn<T, GanttBarPart> weekSubcolumn;
     private YearMonth currentYearMonth;
-
     private LocalDate startDay;
     private LocalDate endDay;
 
@@ -60,6 +56,13 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
         return generate(firstDay, lastDay);
     }
 
+    /**
+     * construction of the diagram. the diagram will be set from stardate to enddate
+     * 
+     * @param firstDay
+     * @param lastDay
+     * @return
+     */
     public DatelineGraphControl<T> generate(LocalDate firstDay, LocalDate lastDay) {
         this.startDay = firstDay;
         this.endDay = lastDay;
@@ -69,6 +72,13 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
         return this;
     }
 
+    /**
+     * create Week Row and Day Row
+     * 
+     * @param firstDay
+     * @param lastDay
+     * @return
+     */
     public TableView<T> setListOfDay(LocalDate firstDay, LocalDate lastDay) {
 
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
@@ -120,9 +130,13 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
         return this;
     }
 
-    public void setGanttPiece(ObservableList<T> ganttTasks) {
-        setItems(FXCollections.unmodifiableObservableList(ganttTasks));
-        // getItems().addAll(ganttTasks);
+    /**
+     * Filling von Diagram with a list of ganttData
+     * 
+     * @param ganttDaten
+     */
+    public void setGanttPiece(ObservableList<T> ganttDaten) {
+        setItems(FXCollections.unmodifiableObservableList(ganttDaten));
 
         setRowFactory(row -> new TableRow<T>() {
             @Override
@@ -135,6 +149,11 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
         });
     }
 
+    /**
+     * Filling von Diagram with a ganttData
+     * 
+     * @param ganttData
+     */
     public void setGanttPiece(T ganttData) {
         // check if start and end are defined
         if (ganttData.getStartDate() != null && ganttData.getEndDate() != null) {
@@ -152,6 +171,12 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
 
     }
 
+    /**
+     * return column where the we have @param localDate
+     * 
+     * @param localDate
+     * @return where the we have @param localDate
+     */
     public TableColumn<T, GanttBarPart> findDayColumn(LocalDate localDate) {
         if (startDay.equals(localDate)) {
             return findDayColumn(localDate, false);
@@ -161,6 +186,13 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
 
     }
 
+    /**
+     * return Column
+     * 
+     * @param localDate
+     * @param chooseFirstDayOfWeek
+     * @return
+     */
     public TableColumn<T, GanttBarPart> findDayColumn(LocalDate localDate, boolean chooseFirstDayOfWeek) {
         WeekFields weekFields = WeekFields.of(Locale.getDefault());
         int weekNumber = localDate.get(weekFields.weekOfWeekBasedYear());
@@ -192,29 +224,44 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
         return null;
     }
 
+    /**
+     * return optional column
+     * 
+     * @param columns
+     * @param columnName
+     * @return
+     */
     private Optional<TableColumn<T, ?>> findDayColumn(ObservableList<TableColumn<T, ?>> columns, String columnName) {
         return columns.stream()
                 .filter(e -> e.getText() != null && e.getText().equalsIgnoreCase(columnName)).findFirst();
     }
 
+    /**
+     * filling the table cells with ObservableGanttBarPart
+     * 
+     * @param startColumn
+     * @param endColumn
+     * @param ganttData
+     */
     public void drawGanttBar(TableColumn<T, GanttBarPart> startColumn, TableColumn<T, GanttBarPart> endColumn,
             T ganttData) {
         boolean isNextCenter = false;
 
         if (startColumn.equals(endColumn)) {
             ((TableColumn<T, GanttBarPart>) startColumn)
-                    .setCellValueFactory(new Callback<CellDataFeatures<T, GanttBarPart>, ObservableValue<GanttBarPart>>() {
-                        public ObservableValue<GanttBarPart> call(CellDataFeatures<T, GanttBarPart> cell) {
-                            // p.getValue() returns the gantt data instance for a particular TableView row
+                    .setCellValueFactory(
+                            new Callback<CellDataFeatures<T, GanttBarPart>, ObservableValue<GanttBarPart>>() {
+                                public ObservableValue<GanttBarPart> call(CellDataFeatures<T, GanttBarPart> cell) {
+                                    // p.getValue() returns the gantt data instance for a particular TableView row
 
-                            if (cell != null && cell.getValue().getId() == ganttData.getId()) {
-                                return new ObservableGanttBarPart(PartType.COMPLET, ganttData.getId(),
-                                        ganttData.getName());
-                            } else {
-                                return null;
-                            }
-                        }
-                    });
+                                    if (cell != null && cell.getValue().getId() == ganttData.getId()) {
+                                        return new ObservableGanttBarPart(PartType.COMPLET, ganttData.getId(),
+                                                ganttData.getName());
+                                    } else {
+                                        return null;
+                                    }
+                                }
+                            });
         } else {
             for (TableColumn<T, ?> column : getColumns().stream()
                     .flatMap(e -> e.getColumns().stream()).collect(Collectors.toList())) {
@@ -223,7 +270,8 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
                     ((TableColumn<T, GanttBarPart>) column)
                             .setCellValueFactory(
                                     new Callback<CellDataFeatures<T, GanttBarPart>, ObservableValue<GanttBarPart>>() {
-                                        public ObservableValue<GanttBarPart> call(CellDataFeatures<T, GanttBarPart> cell) {
+                                        public ObservableValue<GanttBarPart> call(
+                                                CellDataFeatures<T, GanttBarPart> cell) {
                                             // p.getValue() returns the gantt data instance for a particular TableView
                                             // row
 
@@ -240,7 +288,8 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
                     ((TableColumn<T, GanttBarPart>) column)
                             .setCellValueFactory(
                                     new Callback<CellDataFeatures<T, GanttBarPart>, ObservableValue<GanttBarPart>>() {
-                                        public ObservableValue<GanttBarPart> call(CellDataFeatures<T, GanttBarPart> cell) {
+                                        public ObservableValue<GanttBarPart> call(
+                                                CellDataFeatures<T, GanttBarPart> cell) {
                                             // p.getValue() returns the gantt data instance for a particular TableView
                                             // row
 
@@ -256,7 +305,8 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
                     ((TableColumn<T, GanttBarPart>) column)
                             .setCellValueFactory(
                                     new Callback<CellDataFeatures<T, GanttBarPart>, ObservableValue<GanttBarPart>>() {
-                                        public ObservableValue<GanttBarPart> call(CellDataFeatures<T, GanttBarPart> cell) {
+                                        public ObservableValue<GanttBarPart> call(
+                                                CellDataFeatures<T, GanttBarPart> cell) {
                                             // p.getValue() returns the gantt data instance for a particular TableView
                                             // row
 
@@ -274,11 +324,20 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
 
     }
 
+    /**
+     * Scroll to the corresponding column in the graph
+     * 
+     * @param sourceTableView
+     */
     public void scrollToColumnEvent(TableView<T> sourceTableView) {
         sourceTableView.setOnMouseClicked(mouseHandler(sourceTableView));
         sourceTableView.setOnKeyPressed(keyHandler(sourceTableView));
     }
 
+    /**
+     * @param sourceTableView
+     * @return
+     */
     private EventHandler<MouseEvent> mouseHandler(TableView<T> sourceTableView) {
         return new EventHandler<MouseEvent>() {
 
@@ -296,6 +355,10 @@ public abstract class DatelineGraphControl<T extends Activity> extends TableView
         };
     }
 
+    /**
+     * @param sourceTableView
+     * @return
+     */
     private EventHandler<KeyEvent> keyHandler(TableView<T> sourceTableView) {
         return new EventHandler<KeyEvent>() {
 

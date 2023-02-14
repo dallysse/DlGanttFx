@@ -17,15 +17,19 @@ import model.TaskPriority;
 
 public class GanttTaskControl extends GanttTableControl<GanttTask> {
     private GridPane legendBox = new GridPane();
+
+    // Task priority
     private TaskPriority high = new TaskPriority(new Label("Hight Priority"), Color.PALEVIOLETRED);
     private TaskPriority medium = new TaskPriority(new Label("Medium Priority"), Color.SKYBLUE);
     private TaskPriority low = new TaskPriority(new Label("Low Priority"), Color.PALEGREEN);
 
+    // Name of news columns
     private String priority = "Task Priority";
     private String isCritical = "IsCritical";
 
     public GanttTaskControl() {
         super();
+        // Name of columns
         this.name = "Task Name";
         this.start = "Task Start";
         this.end = "Task End";
@@ -34,12 +38,14 @@ public class GanttTaskControl extends GanttTableControl<GanttTask> {
         this.description = "Task Description";
     }
 
+    // add a legend
     @Override
     public void init() {
         tableWithPriorityLegendControl.setBottom(legendBox);
         addPriorityLegend();
     }
 
+    // add news columns
     @Override
     public void addSpecificColumns() {
         // Creating columns
@@ -88,6 +94,9 @@ public class GanttTaskControl extends GanttTableControl<GanttTask> {
         this.getColumns().addAll(priorityCol, isCriticalCol);
     }
 
+    /**
+     * add legend in HBox
+     */
     private void addPriorityLegend() {
         // legende
         HBox lpHBox = createLegendElement(low);
@@ -99,6 +108,12 @@ public class GanttTaskControl extends GanttTableControl<GanttTask> {
         legendBox.add(hpHBox, 2, 0);
     }
 
+    /**
+     * set legend
+     * 
+     * @param priority
+     * @return
+     */
     private HBox createLegendElement(TaskPriority priority) {
         Rectangle rect = new Rectangle();
         rect.setX(20); // setting the X coordinate of upper left //corner of rectangle
